@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Картошка + 3D</title>
+    <title>Клуб любителей чипсов Lorenz</title>
+    <meta name="description" content="Клуб любителей чипсов Lorenz — всё о чипсах, вкусах, истории и культуре. Присоединяйся к нам!" />
     <style>
         /* ===== ОБЩИЕ СТИЛИ ===== */
         * {
@@ -13,11 +14,10 @@
         }
 
         body {
-            background: #0d0d0d;
-            font-family: Arial, sans-serif;
-            color: white;
+            background: #ffffff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1a1a1a;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
         /* ===== ХЕДЕР С ВИДЕО ===== */
@@ -26,30 +26,34 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
-            background: #111;
-            will-change: transform;
+            background: #f5f0eb;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
 
         .header video {
-            width: 110%;
-            height: 110%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             position: absolute;
-            top: -5%;
-            left: -5%;
+            top: 0;
+            left: 0;
             display: block;
-            will-change: transform;
-            transition: transform 0.1s ease-out;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
         }
 
-        /* Затемнение */
+        .header:hover video {
+            opacity: 1;
+        }
+
         .header-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -58,56 +62,95 @@
             padding: 20px;
             z-index: 2;
             pointer-events: none;
+            background: rgba(255, 255, 255, 0.3);
+            transition: background 0.5s ease;
+        }
+
+        .header:hover .header-overlay {
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .header-overlay h1 {
             font-size: clamp(2.5rem, 8vw, 6rem);
             font-weight: 900;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+            color: #1a1a1a;
+            text-shadow: 0 4px 30px rgba(255, 255, 255, 0.6);
             letter-spacing: 2px;
-            transform: translateY(0);
-            transition: transform 0.3s ease-out;
         }
 
         .header-overlay p {
             font-size: clamp(1rem, 2vw, 1.5rem);
-            opacity: 0.9;
+            color: #1a1a1a;
+            opacity: 0.8;
             margin-top: 10px;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
         }
 
-        /* Стрелка вниз (подсказка скролла) */
-        .scroll-hint {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-            color: white;
-            font-size: 2rem;
-            animation: bounce 2s infinite;
-            pointer-events: none;
-            opacity: 0.7;
+        .header-overlay .hint {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(15px); }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== РАЗДЕЛИТЕЛЬНАЯ СЕКЦИЯ (текст между видео и 3D) ===== */
+        .divider-section {
+            padding: 80px 20px;
+            background: #ffffff;
+            text-align: center;
+            border-top: 1px solid #f0ebe6;
+            border-bottom: 1px solid #f0ebe6;
+        }
+
+        .divider-section .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .divider-section h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #d4a373;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .divider-section .sub {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .divider-section .divider-line {
+            width: 80px;
+            height: 3px;
+            background: #d4a373;
+            margin: 0 auto 20px;
+            border-radius: 2px;
+        }
+
+        .divider-section .chip-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
         /* ===== 3D-БЛОК ===== */
         .model-section {
             width: 100%;
             height: 100vh;
-            background: #1a1a1a;
+            background: #ffffff;
             position: relative;
-            overflow: hidden;
         }
 
         model-viewer {
             width: 100%;
             height: 100%;
-            background: #1a1a1a;
+            background: #ffffff;
             cursor: grab;
         }
 
@@ -122,13 +165,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #1a1a1a;
+            background: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10;
-            color: white;
+            color: #1a1a1a;
             pointer-events: none;
         }
 
@@ -136,7 +179,7 @@
             width: 300px;
             max-width: 80%;
             height: 6px;
-            background: #333;
+            background: #e0d6cc;
             border-radius: 3px;
             overflow: hidden;
             margin-top: 10px;
@@ -145,38 +188,56 @@
         #loader .progress {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            background: #d4a373;
             transition: width 0.2s ease;
         }
 
         #loader #progress-text {
             margin-top: 12px;
             font-size: 14px;
-            color: #aaa;
+            color: #888;
         }
 
-        /* ===== ПОДПИСЬ НАД 3D ===== */
-        .model-label {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+        /* ===== SEO-ТЕКСТ (под 3D) ===== */
+        .seo-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 30px 80px;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+
+        .seo-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #d4a373;
+        }
+
+        .seo-section p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: #2c2c2c;
+        }
+
+        .seo-section strong {
+            color: #b8860b;
         }
 
         /* ===== АДАПТАЦИЯ ===== */
         @media (max-width: 768px) {
             .header, .model-section {
                 height: 100vh;
+            }
+            .divider-section {
+                padding: 50px 16px;
+            }
+            .divider-section h2 {
+                font-size: 1.6rem;
+            }
+            .seo-section {
+                padding: 40px 20px 60px;
             }
         }
     </style>
@@ -191,16 +252,27 @@
         </video>
 
         <div class="header-overlay">
-            <h1 id="header-title">🥔 Картошка</h1>
-            <p>Крути мышкой, листай вниз</p>
+            <h1>🥔 Клуб любителей чипсов Lorenz</h1>
+            <p>Наведи мышку — картошка оживёт</p>
+            <div class="hint">⬇️ Листай вниз</div>
         </div>
-
-        <div class="scroll-hint">↓</div>
     </header>
+
+    <!-- ===== РАЗДЕЛИТЕЛЬНАЯ СЕКЦИЯ ===== -->
+    <section class="divider-section">
+        <div class="container">
+            <div class="chip-icon">🍟</div>
+            <h2>От картофеля до хруста</h2>
+            <div class="divider-line"></div>
+            <p class="sub">
+                Мы знаем, как вырастить идеальный картофель, превратить его в золотистый чипс и подарить тебе мгновение настоящего удовольствия. 
+                А теперь — смотри, как наша 3D-модель раскрывает секреты совершенного хруста.
+            </p>
+        </div>
+    </section>
 
     <!-- ===== 3D-МОДЕЛЬ ===== -->
     <section class="model-section" id="model-section">
-        <!-- Прелоадер -->
         <div id="loader">
             <h3>⏳ Загрузка 3D-модели</h3>
             <div class="bar">
@@ -209,21 +281,46 @@
             <p id="progress-text">0%</p>
         </div>
 
-        <!-- 3D-плеер -->
         <model-viewer
             id="model"
             src="scene.glb"
-            alt="3D-модель"
+            alt="3D-модель чипсов Lorenz"
             auto-rotate
             camera-controls
-            shadow-intensity="1"
+            shadow-intensity="0.5"
             exposure="1.2"
             ar
             interaction-prompt="none"
+            style="background: #ffffff;"
         >
         </model-viewer>
+    </section>
 
-        <div class="model-label">🖱️ Вращай мышкой</div>
+    <!-- ===== SEO-ТЕКСТ ===== -->
+    <section class="seo-section">
+        <h2>🍟 О клубе любителей чипсов Lorenz</h2>
+        <p>
+            <strong>Клуб любителей чипсов Lorenz</strong> — это сообщество настоящих ценителей хрустящего вкуса и качественных снеков. 
+            Мы объединяем тех, кто знает толк в идеально приготовленном картофеле, кто ценит традиции немецкого качества и любит экспериментировать с новыми вкусами.
+        </p>
+        <p>
+            Чипсы <strong>Lorenz</strong> — это не просто перекус. Это символ уюта, дружеских посиделок и искреннего удовольствия. 
+            На протяжении десятилетий бренд Lorenz радует своих поклонников неизменно высоким качеством: хрустящая текстура, натуральные ингредиенты, 
+            сбалансированный вкус и внимание к каждой детали производства. Каждый чипс — это маленькое произведение искусства.
+        </p>
+        <p>
+            В нашем клубе мы делимся новостями о новинках, обсуждаем любимые вкусы — от классической соли до пикантного паприки, 
+            организуем дегустации и конкурсы. Мы знаем, как правильно выбрать чипсы к фильму, к пиву или просто для поднятия настроения. 
+            Присоединяйся к нам, если ты тоже считаешь, что идеальный хруст — это не случайность, а результат мастерства.
+        </p>
+        <p>
+            <strong>Lorenz</strong> — это больше чем бренд. Это философия вкуса, проверенная временем. Мы гордимся тем, что в каждой пачке — 
+            любовь к картофелю, уважение к традициям и стремление радовать каждого, кто выбирает качество. 
+            Стань частью нашего клуба, и ты откроешь для себя мир чипсов заново!
+        </p>
+        <p style="margin-top: 20px; font-style: italic; color: #888;">
+            #КлубЛюбителейChipсовLorenz #ХрустиПоНастоящему
+        </p>
     </section>
 
     <!-- ===== ПОДКЛЮЧАЕМ MODEL-VIEWER ===== -->
@@ -255,61 +352,20 @@
             loader.style.display = 'none';
         });
 
-        // === ЭФФЕКТ ПАРАЛЛАКСА ДЛЯ ВИДЕО ПРИ СКРОЛЛЕ ===
+        // === ВИДЕО ВКЛЮЧАЕТСЯ ТОЛЬКО ПРИ НАВЕДЕНИИ ===
         const header = document.getElementById('header');
         const video = document.getElementById('header-video');
-        const title = document.getElementById('header-title');
 
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const viewportHeight = window.innerHeight;
-
-            // Видео смещается при скролле (эффект глубины)
-            const videoOffset = scrollY * 0.3;
-            video.style.transform = `translateY(${videoOffset}px) scale(1.05)`;
-
-            // Заголовок улетает вверх
-            const titleOffset = scrollY * 0.2;
-            title.style.transform = `translateY(${-titleOffset}px)`;
-
-            // Затемнение исчезает
-            const overlay = document.querySelector('.header-overlay');
-            const opacity = Math.max(0, 1 - scrollY / viewportHeight);
-            overlay.style.opacity = opacity;
+        header.addEventListener('mouseenter', () => {
+            video.play().catch(() => {});
         });
 
-        // === РЕАКЦИЯ НА ДВИЖЕНИЕ МЫШИ (3D + ВИДЕО) ===
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            // Нормализуем координаты от -1 до 1
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            // Видео слегка двигается за мышкой (параллакс)
-            video.style.transform = `translate(${mouseX * 15}px, ${mouseY * 15}px) scale(1.05)`;
+        header.addEventListener('mouseleave', () => {
+            video.pause();
+            video.currentTime = 0;
         });
 
-        // === ПЛАВНЫЙ СКРОЛЛ ПО КОЛЁСИКУ ===
-        document.addEventListener('wheel', (event) => {
-            // Если скроллим вниз и ещё не дошли до 3D-секции
-            if (event.deltaY > 0) {
-                const modelSection = document.getElementById('model-section');
-                const rect = modelSection.getBoundingClientRect();
-                if (rect.top > 0) {
-                    event.preventDefault();
-                    modelSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        }, { passive: false });
-
-        // === ПЕРЕХОД ПО КЛИКУ НА СТРЕЛКУ ===
-        document.querySelector('.scroll-hint').addEventListener('click', () => {
-            document.getElementById('model-section').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        console.log('🥔 Сайт с картошкой и 3D готов!');
+        console.log('🥔 Клуб любителей чипсов Lorenz готов!');
     </script>
 
 </body>
