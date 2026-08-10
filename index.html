@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Картошка + 3D</title>
+    <style>
+        /* ===== ОБЩИЕ СТИЛИ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0d0d0d;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* ===== ХЕДЕР С ВИДЕО ===== */
+        .header {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background: #111;
+            will-change: transform;
+        }
+
+        .header video {
+            width: 110%;
+            height: 110%;
+            object-fit: cover;
+            position: absolute;
+            top: -5%;
+            left: -5%;
+            display: block;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Затемнение */
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .header-overlay h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 900;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+            transform: translateY(0);
+            transition: transform 0.3s ease-out;
+        }
+
+        .header-overlay p {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            opacity: 0.9;
+            margin-top: 10px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Стрелка вниз (подсказка скролла) */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            color: white;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+
+        /* ===== 3D-БЛОК ===== */
+        .model-section {
+            width: 100%;
+            height: 100vh;
+            background: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            cursor: grab;
+        }
+
+        model-viewer:active {
+            cursor: grabbing;
+        }
+
+        /* ===== ПРЕЛОАДЕР ===== */
+        #loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            color: white;
+            pointer-events: none;
+        }
+
+        #loader .bar {
+            width: 300px;
+            max-width: 80%;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        #loader .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            transition: width 0.2s ease;
+        }
+
+        #loader #progress-text {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* ===== ПОДПИСЬ НАД 3D ===== */
+        .model-label {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ===== АДАПТАЦИЯ ===== */
+        @media (max-width: 768px) {
+            .header, .model-section {
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ХЕДЕР С ВИДЕО ===== -->
+    <header class="header" id="header">
+        <video autoplay loop muted playsinline id="header-video">
+            <source src="video.mp4" type="video/mp4" />
+            Ваш браузер не поддерживает видео.
+        </video>
+
+        <div class="header-overlay">
+            <h1 id="header-title">🥔 Картошка</h1>
+            <p>Крути мышкой, листай вниз</p>
+        </div>
+
+        <div class="scroll-hint">↓</div>
+    </header>
+
+    <!-- ===== 3D-МОДЕЛЬ ===== -->
+    <section class="model-section" id="model-section">
+        <!-- Прелоадер -->
+        <div id="loader">
+            <h3>⏳ Загрузка 3D-модели</h3>
+            <div class="bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+            <p id="progress-text">0%</p>
+        </div>
+
+        <!-- 3D-плеер -->
+        <model-viewer
+            id="model"
+            src="scene.glb"
+            alt="3D-модель"
+            auto-rotate
+            camera-controls
+            shadow-intensity="1"
+            exposure="1.2"
+            ar
+            interaction-prompt="none"
+        >
+        </model-viewer>
+
+        <div class="model-label">🖱️ Вращай мышкой</div>
+    </section>
+
+    <!-- ===== ПОДКЛЮЧАЕМ MODEL-VIEWER ===== -->
+    <script type="importmap">
+    {
+        "imports": {
+            "@google/model-viewer": "https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import '@google/model-viewer';
+
+        // === ПРОГРЕСС ЗАГРУЗКИ ===
+        const modelViewer = document.getElementById('model');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const loader = document.getElementById('loader');
+
+        modelViewer.addEventListener('progress', (event) => {
+            const percent = Math.round(event.detail.totalProgress * 100);
+            progressBar.style.width = percent + '%';
+            progressText.textContent = percent + '%';
+            if (percent >= 100) loader.style.display = 'none';
+        });
+
+        modelViewer.addEventListener('load', () => {
+            loader.style.display = 'none';
+        });
+
+        // === ЭФФЕКТ ПАРАЛЛАКСА ДЛЯ ВИДЕО ПРИ СКРОЛЛЕ ===
+        const header = document.getElementById('header');
+        const video = document.getElementById('header-video');
+        const title = document.getElementById('header-title');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+
+            // Видео смещается при скролле (эффект глубины)
+            const videoOffset = scrollY * 0.3;
+            video.style.transform = `translateY(${videoOffset}px) scale(1.05)`;
+
+            // Заголовок улетает вверх
+            const titleOffset = scrollY * 0.2;
+            title.style.transform = `translateY(${-titleOffset}px)`;
+
+            // Затемнение исчезает
+            const overlay = document.querySelector('.header-overlay');
+            const opacity = Math.max(0, 1 - scrollY / viewportHeight);
+            overlay.style.opacity = opacity;
+        });
+
+        // === РЕАКЦИЯ НА ДВИЖЕНИЕ МЫШИ (3D + ВИДЕО) ===
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            // Нормализуем координаты от -1 до 1
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Видео слегка двигается за мышкой (параллакс)
+            video.style.transform = `translate(${mouseX * 15}px, ${mouseY * 15}px) scale(1.05)`;
+        });
+
+        // === ПЛАВНЫЙ СКРОЛЛ ПО КОЛЁСИКУ ===
+        document.addEventListener('wheel', (event) => {
+            // Если скроллим вниз и ещё не дошли до 3D-секции
+            if (event.deltaY > 0) {
+                const modelSection = document.getElementById('model-section');
+                const rect = modelSection.getBoundingClientRect();
+                if (rect.top > 0) {
+                    event.preventDefault();
+                    modelSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }, { passive: false });
+
+        // === ПЕРЕХОД ПО КЛИКУ НА СТРЕЛКУ ===
+        document.querySelector('.scroll-hint').addEventListener('click', () => {
+            document.getElementById('model-section').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        console.log('🥔 Сайт с картошкой и 3D готов!');
+    </script>
+
+</body>
+</html>
