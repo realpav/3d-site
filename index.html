@@ -309,81 +309,54 @@
             width: 100%;
         }
 
-        .three-d-section {
-            width: 100%;
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            padding: 60px 40px;
+        /* ----- 3D БЛОКИ ----- */
+        .sphere-section {
+            padding: 60px 40px 40px;
             background: #0a0a0a;
-            scroll-margin-top: 0;
+            text-align: center;
         }
 
-        .three-d-text h3 {
-            font-size: 38px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-        }
-
-        .three-d-text h3 span {
-            background: linear-gradient(135deg, #ff00cc, #ffcc00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .three-d-text p {
-            font-size: 17px;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.5);
-            max-width: 420px;
-        }
-
-        .model-container {
-            width: 100%;
+        .sphere-container {
             max-width: 500px;
-            aspect-ratio: 1/1;
-            position: relative;
-            border-radius: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 0 80px rgba(255, 0, 204, 0.04);
-            overflow: hidden;
             margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            aspect-ratio: 1/1;
             background: radial-gradient(circle at center, #1a1a2e, #0a0a0a);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .model-container canvas {
+        .sphere-container canvas {
             width: 100% !important;
             height: 100% !important;
             display: block;
         }
 
-        .model-container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 22px;
-            background: conic-gradient(from 0deg, #ff00cc, #ffcc00, #00ff88, #ff00cc);
-            z-index: -1;
-            opacity: 0.15;
-            animation: rotateBorder 8s linear infinite;
+        .chip-section {
+            width: 100%;
+            min-height: 80vh;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
         }
 
-        @keyframes rotateBorder {
-            to {
-                transform: rotate(360deg);
-            }
+        .chip-container {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 4/3;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
+        }
+
+        .chip-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
 
         .footer {
@@ -417,16 +390,8 @@
             .video-section .overlay-text h2 {
                 font-size: 30px;
             }
-            .three-d-section {
-                grid-template-columns: 1fr;
-                text-align: center;
-                padding: 40px 20px;
-            }
-            .three-d-text p {
+            .chip-container {
                 max-width: 100%;
-            }
-            .model-container {
-                max-width: 380px;
             }
         }
 
@@ -462,8 +427,15 @@
             .video-section .overlay-text p {
                 font-size: 15px;
             }
-            .three-d-text h3 {
-                font-size: 28px;
+            .sphere-section {
+                padding: 40px 20px;
+            }
+            .sphere-container {
+                max-width: 350px;
+            }
+            .chip-section {
+                padding: 20px;
+                min-height: 60vh;
             }
             .footer {
                 flex-direction: column;
@@ -484,7 +456,7 @@
             .video-section .overlay-text h2 {
                 font-size: 22px;
             }
-            .model-container {
+            .sphere-container {
                 max-width: 280px;
             }
         }
@@ -495,6 +467,7 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
+    <!-- ===== ХИДЕР ===== -->
     <header class="header" id="header">
         <div class="header-content">
             <div class="badge">⚡ ХРУСТ КАК ИСКУССТВО</div>
@@ -514,6 +487,7 @@
         </div>
     </header>
 
+    <!-- ===== ВИДЕО ===== -->
     <section class="video-section" id="video-section">
         <video id="mainVideo" autoplay muted loop playsinline>
             <source src="video-potato.webm" type="video/webm">
@@ -540,289 +514,362 @@
         </div>
     </section>
 
-<!-- ===== 3D-БЛОК 1: НЕОНОВЫЙ ШАР (как был) ===== -->
-<section style="padding:60px 40px 40px; background:#0a0a0a; text-align:center;">
-    <h3 style="font-size:28px; font-weight:800; color:#fff; margin-bottom:8px;">Тайна <span style="background:linear-gradient(135deg,#ff00cc,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">идеального</span> хруста</h3>
-    <p style="color:rgba(255,255,255,0.5); font-size:16px; max-width:600px; margin:0 auto 30px;">
-        Смотри, как наша 3D-модель раскрывает секреты совершенного хруста.
-        Вращай, приближай — исследуй каждый миллиметр идеального чипса.
-    </p>
-    <div style="max-width:500px; margin:0 auto; aspect-ratio:1/1; background:radial-gradient(circle at center, #1a1a2e, #0a0a0a); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
-        <canvas id="sphere3d" style="width:100%; height:100%; display:block;"></canvas>
-    </div>
-</section>
-
-<!-- ===== 3D-БЛОК 2: ЧИПС НА БЕЛОМ ФОНЕ (на всю ширину) ===== -->
-<section style="width:100%; min-height:80vh; background:#ffffff; display:flex; align-items:center; justify-content:center; padding:40px;">
-    <div style="width:100%; max-width:800px; aspect-ratio:4/3; background:#ffffff; border-radius:20px; overflow:hidden; position:relative;">
-        <canvas id="chip3d" style="width:100%; height:100%; display:block;"></canvas>
-        <div id="loading-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,0.95);z-index:10;transition:opacity 0.8s;">
-            <div style="width:40px;height:40px;border:2px solid rgba(0,0,0,0.1);border-top-color:#ff00cc;border-radius:50%;animation:spin 0.6s linear infinite;"></div>
-            <div style="font-size:13px;color:#888;letter-spacing:2px;text-transform:uppercase;">Загрузка <span id="progress-text">0%</span></div>
+    <!-- ===== НЕОНОВЫЙ ШАР ===== -->
+    <section class="sphere-section" id="sphere-section">
+        <h3 style="font-size:28px; font-weight:800; color:#fff; margin-bottom:8px;">Тайна <span style="background:linear-gradient(135deg,#ff00cc,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">идеального</span> хруста</h3>
+        <p style="color:rgba(255,255,255,0.5); font-size:16px; max-width:600px; margin:0 auto 30px;">
+            Смотри, как наша 3D-модель раскрывает секреты совершенного хруста.
+            Вращай, приближай — исследуй каждый миллиметр идеального чипса.
+        </p>
+        <div class="sphere-container">
+            <canvas id="sphere3d"></canvas>
         </div>
+    </section>
+
+    <!-- ===== 3D-ЧИПС НА БЕЛОМ ФОНЕ ===== -->
+    <section class="chip-section" id="chip-section">
+        <div class="chip-container">
+            <canvas id="chip3d"></canvas>
+            <div id="loading-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,0.95);z-index:10;transition:opacity 0.8s;">
+                <div style="width:40px;height:40px;border:2px solid rgba(0,0,0,0.1);border-top-color:#ff00cc;border-radius:50%;animation:spin 0.6s linear infinite;"></div>
+                <div style="font-size:13px;color:#888;letter-spacing:2px;text-transform:uppercase;">Загрузка <span id="progress-text">0%</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ФУТЕР ===== -->
+    <div class="footer">
+        <span>© 2026 <span style="color:rgba(255,0,204,0.3);">✦</span> Клуб бунтарей Lorenz</span>
+        <span>
+            <a href="#">Instagram</a> •
+            <a href="#">Telegram</a> •
+            <a href="#">ВКонтакте</a>
+        </span>
     </div>
-</section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<script>
-    // ================================================================
-    // 1. НЕОНОВЫЙ ШАР (как был)
-    // ================================================================
-    (function() {
-        const canvas = document.getElementById('sphere3d');
-        if (!canvas) return;
-
-        const container = canvas.parentElement;
-        const w = container.clientWidth || 400;
-        const h = container.clientHeight || 400;
-        canvas.width = w;
-        canvas.height = h;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a0a);
-
-        const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-        camera.position.set(3, 2, 5);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-        renderer.setSize(w, h);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        const group = new THREE.Group();
-        scene.add(group);
-
-        // Частицы
-        const count = 800;
-        const positions = new Float32Array(count * 3);
-        const colors = new Float32Array(count * 3);
-        const radius = 1.2;
-
-        for (let i = 0; i < count; i++) {
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            const r = radius * Math.cbrt(Math.random());
-            positions[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
-            positions[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
-            positions[i * 3 + 2] = Math.cos(phi) * r;
-            const mix = Math.random();
-            colors[i * 3] = mix * 1.0;
-            colors[i * 3 + 1] = (1 - mix) * 0.5 + mix * 0.8;
-            colors[i * 3 + 2] = (1 - mix) * 1.0 + mix * 0.0;
-        }
-
-        const geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const mat = new THREE.PointsMaterial({
-            size: 0.06,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.9,
-            blending: THREE.AdditiveBlending,
-            sizeAttenuation: true,
-        });
-        group.add(new THREE.Points(geo, mat));
-
-        // Мелкие частицы
-        const smallCount = 400;
-        const smallPos = new Float32Array(smallCount * 3);
-        for (let i = 0; i < smallCount; i++) {
-            const r = radius * 1.8 + Math.random() * 1.2;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            smallPos[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
-            smallPos[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
-            smallPos[i * 3 + 2] = Math.cos(phi) * r;
-        }
-        const smallGeo = new THREE.BufferGeometry();
-        smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
-        const smallMat = new THREE.PointsMaterial({
-            size: 0.02,
-            color: 0x00ff88,
-            transparent: true,
-            opacity: 0.3,
-            blending: THREE.AdditiveBlending,
-            sizeAttenuation: true,
-        });
-        group.add(new THREE.Points(smallGeo, smallMat));
-
-        // Управление
-        let isDragging = false;
-        let prevMouse = { x: 0, y: 0 };
-        let autoRotate = true;
-
-        canvas.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            autoRotate = false;
-            prevMouse = { x: e.clientX, y: e.clientY };
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - prevMouse.x;
-            const dy = e.clientY - prevMouse.y;
-            group.rotation.y += dx * 0.01;
-            group.rotation.x += dy * 0.01;
-            prevMouse = { x: e.clientX, y: e.clientY };
-        });
-
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            setTimeout(() => { autoRotate = true; }, 3000);
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-            if (autoRotate) {
-                group.rotation.y += 0.005;
-                group.rotation.x = Math.sin(Date.now() * 0.0002) * 0.1;
+    <!-- ===== THREE.JS (исправленная версия с модулями) ===== -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
             }
-            renderer.render(scene, camera);
         }
-        animate();
+    </script>
 
-        function resize() {
-            const rect = container.getBoundingClientRect();
-            const w = rect.width || 400;
-            const h = rect.height || 400;
+    <script type="module">
+        // ================================================================
+        // 1. ИМПОРТЫ
+        // ================================================================
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        // ================================================================
+        // 2. НЕОНОВЫЙ ШАР
+        // ================================================================
+        (function initSphere() {
+            const canvas = document.getElementById('sphere3d');
+            if (!canvas) return;
+
+            const container = canvas.parentElement;
+            const w = container.clientWidth || 400;
+            const h = container.clientHeight || 400;
             canvas.width = w;
             canvas.height = h;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+
+            const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+            camera.position.set(3, 2, 5);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        }
-        window.addEventListener('resize', resize);
-        setTimeout(resize, 200);
-        setTimeout(resize, 500);
-    })();
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // ================================================================
-    // 2. ЧИПС НА БЕЛОМ ФОНЕ (НА ВСЮ ШИРИНУ)
-    // ================================================================
-    (function() {
-        const canvas = document.getElementById('chip3d');
-        const container = canvas.parentElement;
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const progressText = document.getElementById('progress-text');
+            const group = new THREE.Group();
+            scene.add(group);
 
-        if (!canvas || !container) return;
+            // Частицы
+            const count = 800;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+            const radius = 1.2;
 
-        const w = container.clientWidth || 800;
-        const h = container.clientHeight || 600;
-        canvas.width = w;
-        canvas.height = h;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xffffff);
-
-        const camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 100);
-        camera.position.set(4, 3, 7);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-        renderer.setSize(w, h);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
-
-        const group = new THREE.Group();
-        scene.add(group);
-
-        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-        const l1 = new THREE.DirectionalLight(0xffffff, 2);
-        l1.position.set(5, 8, 6);
-        scene.add(l1);
-        const l2 = new THREE.DirectionalLight(0xffdd99, 1);
-        l2.position.set(-4, 2, 4);
-        scene.add(l2);
-        const l3 = new THREE.DirectionalLight(0x99ccff, 0.8);
-        l3.position.set(0, -2, 5);
-        scene.add(l3);
-
-        let isDragging = false;
-        let prevMouse = { x: 0, y: 0 };
-        let autoRotate = true;
-
-        const loader = new THREE.GLTFLoader();
-        loader.load(
-            'scene.glb',
-            (gltf) => {
-                const model = gltf.scene;
-                const box = new THREE.Box3().setFromObject(model);
-                const size = box.getSize(new THREE.Vector3());
-                const maxDim = Math.max(size.x, size.y, size.z);
-                if (maxDim > 0) model.scale.set(1.8 / maxDim, 1.8 / maxDim, 1.8 / maxDim);
-                const center = box.getCenter(new THREE.Vector3());
-                model.position.sub(center);
-                group.add(model);
-                loadingOverlay.style.display = 'none';
-            },
-            (xhr) => {
-                const percent = Math.round((xhr.loaded / xhr.total) * 100);
-                progressText.textContent = percent + '%';
-            },
-            () => {
-                loadingOverlay.style.display = 'none';
-                // Заглушка
-                const g = new THREE.CylinderGeometry(1.2, 1.2, 0.12, 48);
-                const m = new THREE.MeshStandardMaterial({ color: 0xe8b84b, roughness: 0.7, flatShading: true });
-                const mesh = new THREE.Mesh(g, m);
-                mesh.rotation.x = 0.3;
-                mesh.rotation.z = 0.2;
-                group.add(mesh);
+            for (let i = 0; i < count; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const r = radius * Math.cbrt(Math.random());
+                positions[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
+                positions[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
+                positions[i * 3 + 2] = Math.cos(phi) * r;
+                const mix = Math.random();
+                colors[i * 3] = mix * 1.0;
+                colors[i * 3 + 1] = (1 - mix) * 0.5 + mix * 0.8;
+                colors[i * 3 + 2] = (1 - mix) * 1.0 + mix * 0.0;
             }
-        );
 
-        canvas.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            autoRotate = false;
-            prevMouse = { x: e.clientX, y: e.clientY };
-        });
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - prevMouse.x;
-            const dy = e.clientY - prevMouse.y;
-            group.rotation.y += dx * 0.01;
-            group.rotation.x += dy * 0.01;
-            prevMouse = { x: e.clientX, y: e.clientY };
-        });
+            const mat = new THREE.PointsMaterial({
+                size: 0.06,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.9,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true,
+            });
+            group.add(new THREE.Points(geo, mat));
 
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-            setTimeout(() => { autoRotate = true; }, 3000);
-        });
-
-        function animate() {
-            requestAnimationFrame(animate);
-            if (autoRotate) {
-                group.rotation.y += 0.008;
-                group.rotation.x = Math.sin(Date.now() * 0.0003) * 0.1;
+            // Мелкие частицы
+            const smallCount = 400;
+            const smallPos = new Float32Array(smallCount * 3);
+            for (let i = 0; i < smallCount; i++) {
+                const r = radius * 1.8 + Math.random() * 1.2;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                smallPos[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
+                smallPos[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
+                smallPos[i * 3 + 2] = Math.cos(phi) * r;
             }
-            renderer.render(scene, camera);
-        }
-        animate();
+            const smallGeo = new THREE.BufferGeometry();
+            smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
+            const smallMat = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x00ff88,
+                transparent: true,
+                opacity: 0.3,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true,
+            });
+            group.add(new THREE.Points(smallGeo, smallMat));
 
-        function resize() {
-            const rect = container.getBoundingClientRect();
-            const w = rect.width || 800;
-            const h = rect.height || 600;
+            // Управление
+            let isDragging = false;
+            let prevMouse = { x: 0, y: 0 };
+            let autoRotate = true;
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 1.5;
+            controls.target.set(0, 0, 0);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            function resize() {
+                const rect = container.getBoundingClientRect();
+                const w = rect.width || 400;
+                const h = rect.height || 400;
+                canvas.width = w;
+                canvas.height = h;
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+            }
+            window.addEventListener('resize', resize);
+            setTimeout(resize, 200);
+            setTimeout(resize, 500);
+        })();
+
+        // ================================================================
+        // 3. 3D-ЧИПС НА БЕЛОМ ФОНЕ
+        // ================================================================
+        (function initChip() {
+            const canvas = document.getElementById('chip3d');
+            const container = canvas.parentElement;
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const progressText = document.getElementById('progress-text');
+
+            if (!canvas || !container) return;
+
+            const w = container.clientWidth || 800;
+            const h = container.clientHeight || 600;
             canvas.width = w;
             canvas.height = h;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+
+            const camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 100);
+            camera.position.set(4, 3, 7);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        }
-        window.addEventListener('resize', resize);
-        setTimeout(resize, 200);
-        setTimeout(resize, 500);
-    })();
-</script>
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            // Свет
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const l1 = new THREE.DirectionalLight(0xffffff, 2);
+            l1.position.set(5, 8, 6);
+            scene.add(l1);
+            const l2 = new THREE.DirectionalLight(0xffdd99, 1);
+            l2.position.set(-4, 2, 4);
+            scene.add(l2);
+            const l3 = new THREE.DirectionalLight(0x99ccff, 0.8);
+            l3.position.set(0, -2, 5);
+            scene.add(l3);
+
+            // Управление
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 2.0;
+            controls.target.set(0, 0, 0);
+
+            // Загружаем модель
+            const loader = new GLTFLoader();
+
+            // Сначала показываем индикатор загрузки
+            loadingOverlay.style.display = 'flex';
+
+            loader.load(
+                'scene.glb',
+                (gltf) => {
+                    const model = gltf.scene;
+                    // Автоматическое масштабирование
+                    const box = new THREE.Box3().setFromObject(model);
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    if (maxDim > 0) {
+                        model.scale.set(1.8 / maxDim, 1.8 / maxDim, 1.8 / maxDim);
+                    }
+                    const center = box.getCenter(new THREE.Vector3());
+                    model.position.sub(center);
+                    group.add(model);
+                    loadingOverlay.style.display = 'none';
+                    console.log('✅ Модель чипса загружена!');
+                },
+                (xhr) => {
+                    const percent = Math.round((xhr.loaded / xhr.total) * 100);
+                    progressText.textContent = percent + '%';
+                },
+                (error) => {
+                    console.warn('❌ scene.glb не загрузился, создаём встроенный чипс:', error);
+                    loadingOverlay.style.display = 'none';
+                    createChip();
+                }
+            );
+
+            function createChip() {
+                const chipGroup = new THREE.Group();
+
+                // Основа — плоский диск
+                const discGeo = new THREE.CylinderGeometry(1.3, 1.3, 0.15, 48);
+                const discMat = new THREE.MeshStandardMaterial({
+                    color: 0xe8b84b,
+                    emissive: 0xcc8833,
+                    emissiveIntensity: 0.05,
+                    metalness: 0.05,
+                    roughness: 0.6,
+                    flatShading: false,
+                });
+                const disc = new THREE.Mesh(discGeo, discMat);
+                disc.position.z = 0;
+                chipGroup.add(disc);
+
+                // Неровности
+                for (let i = 0; i < 40; i++) {
+                    const bumpGeo = new THREE.SphereGeometry(0.05 + Math.random() * 0.12, 6, 6);
+                    const bumpMat = new THREE.MeshStandardMaterial({
+                        color: new THREE.Color().setHSL(0.08 + Math.random() * 0.04, 0.6, 0.5 + Math.random() * 0.2),
+                        roughness: 0.8,
+                        flatShading: true,
+                    });
+                    const bump = new THREE.Mesh(bumpGeo, bumpMat);
+                    const r = Math.random() * 0.95;
+                    const angle = Math.random() * Math.PI * 2;
+                    bump.position.set(
+                        Math.cos(angle) * r,
+                        Math.sin(angle) * r,
+                        0.08 + Math.random() * 0.12
+                    );
+                    bump.scale.set(1, 1, 0.3 + Math.random() * 0.5);
+                    chipGroup.add(bump);
+                }
+
+                // Края
+                for (let i = 0; i < 25; i++) {
+                    const edgeGeo = new THREE.SphereGeometry(0.06 + Math.random() * 0.1, 5, 5);
+                    const edgeMat = new THREE.MeshStandardMaterial({
+                        color: 0xcc9933,
+                        roughness: 0.9,
+                        flatShading: true,
+                    });
+                    const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
+                    const r = 1.2 + Math.random() * 0.2;
+                    const angle = Math.random() * Math.PI * 2;
+                    edgeMesh.position.set(
+                        Math.cos(angle) * r,
+                        Math.sin(angle) * r,
+                        -0.05 + Math.random() * 0.1
+                    );
+                    edgeMesh.scale.set(1, 1, 0.3 + Math.random() * 0.4);
+                    chipGroup.add(edgeMesh);
+                }
+
+                // Нижняя сторона
+                const bottomGeo = new THREE.CircleGeometry(1.1, 32);
+                const bottomMat = new THREE.MeshStandardMaterial({
+                    color: 0xbb8833,
+                    roughness: 0.9,
+                    side: THREE.DoubleSide,
+                });
+                const bottom = new THREE.Mesh(bottomGeo, bottomMat);
+                bottom.position.z = -0.1;
+                bottom.rotation.x = 0;
+                chipGroup.add(bottom);
+
+                chipGroup.rotation.x = 0.3;
+                chipGroup.rotation.z = 0.2;
+                chipGroup.scale.set(0.85, 0.85, 0.85);
+
+                group.add(chipGroup);
+                console.log('✅ Встроенный 3D-чипс создан!');
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            function resize() {
+                const rect = container.getBoundingClientRect();
+                const w = rect.width || 800;
+                const h = rect.height || 600;
+                canvas.width = w;
+                canvas.height = h;
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+            }
+            window.addEventListener('resize', resize);
+            setTimeout(resize, 200);
+            setTimeout(resize, 500);
+        })();
+    </script>
+
     <script>
-        // Курсор
+        // ----- КУРСОР -----
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
 
@@ -842,7 +889,7 @@
             });
         });
 
-        // Скролл
+        // ----- СКРОЛЛ -----
         document.getElementById('btn-explode').addEventListener('click', () => {
             const target = document.getElementById('video-section');
             if (target) {
@@ -857,13 +904,13 @@
         });
 
         document.getElementById('btn-secret').addEventListener('click', () => {
-            const target = document.getElementById('three-d-section');
+            const target = document.getElementById('sphere-section');
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
 
-        // Видео
+        // ----- ВИДЕО -----
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('mainVideo');
             if (video) {
