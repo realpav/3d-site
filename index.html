@@ -540,28 +540,25 @@
         </div>
     </section>
 
-<!-- ===== 3D-БЛОК (шар + чипс) ===== -->
-<section class="three-d-section" id="three-d-section">
-    <div class="three-d-text">
-        <h3>Тайна <span>идеального</span> хруста</h3>
-        <p>
-            Смотри, как наша 3D-модель раскрывает секреты совершенного хруста.
-            Вращай, приближай — исследуй каждый миллиметр идеального чипса.
-        </p>
+<!-- ===== 3D-БЛОК 1: НЕОНОВЫЙ ШАР (как был) ===== -->
+<section style="padding:60px 40px 40px; background:#0a0a0a; text-align:center;">
+    <h3 style="font-size:28px; font-weight:800; color:#fff; margin-bottom:8px;">Тайна <span style="background:linear-gradient(135deg,#ff00cc,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">идеального</span> хруста</h3>
+    <p style="color:rgba(255,255,255,0.5); font-size:16px; max-width:600px; margin:0 auto 30px;">
+        Смотри, как наша 3D-модель раскрывает секреты совершенного хруста.
+        Вращай, приближай — исследуй каждый миллиметр идеального чипса.
+    </p>
+    <div style="max-width:500px; margin:0 auto; aspect-ratio:1/1; background:radial-gradient(circle at center, #1a1a2e, #0a0a0a); border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,0.05);">
+        <canvas id="sphere3d" style="width:100%; height:100%; display:block;"></canvas>
     </div>
-    <div style="display:flex; flex-direction:column; gap:30px; align-items:center; width:100%;">
-        <!-- НЕОНОВЫЙ ШАР -->
-        <div class="model-container" id="sphere-container" style="max-width:400px; aspect-ratio:1/1; background:radial-gradient(circle at center, #1a1a2e, #0a0a0a);">
-            <canvas id="sphere3d"></canvas>
-        </div>
-        
-        <!-- 3D-МОДЕЛЬ ЧИПСА НА БЕЛОМ ФОНЕ -->
-        <div class="model-container" id="chip-container" style="max-width:400px; aspect-ratio:1/1; background:#ffffff;">
-            <canvas id="chip3d"></canvas>
-            <div id="loading-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,0.9);border-radius:20px;z-index:10;transition:opacity 0.8s;">
-                <div style="width:40px;height:40px;border:2px solid rgba(0,0,0,0.1);border-top-color:#ff00cc;border-radius:50%;animation:spin 0.6s linear infinite;"></div>
-                <div style="font-size:13px;color:#888;letter-spacing:2px;text-transform:uppercase;">Загрузка <span id="progress-text">0%</span></div>
-            </div>
+</section>
+
+<!-- ===== 3D-БЛОК 2: ЧИПС НА БЕЛОМ ФОНЕ (на всю ширину) ===== -->
+<section style="width:100%; min-height:80vh; background:#ffffff; display:flex; align-items:center; justify-content:center; padding:40px;">
+    <div style="width:100%; max-width:800px; aspect-ratio:4/3; background:#ffffff; border-radius:20px; overflow:hidden; position:relative;">
+        <canvas id="chip3d" style="width:100%; height:100%; display:block;"></canvas>
+        <div id="loading-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,0.95);z-index:10;transition:opacity 0.8s;">
+            <div style="width:40px;height:40px;border:2px solid rgba(0,0,0,0.1);border-top-color:#ff00cc;border-radius:50%;animation:spin 0.6s linear infinite;"></div>
+            <div style="font-size:13px;color:#888;letter-spacing:2px;text-transform:uppercase;">Загрузка <span id="progress-text">0%</span></div>
         </div>
     </div>
 </section>
@@ -570,13 +567,13 @@
 
 <script>
     // ================================================================
-    // 1. НЕОНОВЫЙ ШАР (частицы)
+    // 1. НЕОНОВЫЙ ШАР (как был)
     // ================================================================
     (function() {
         const canvas = document.getElementById('sphere3d');
-        const container = document.getElementById('sphere-container');
-        if (!canvas || !container) return;
+        if (!canvas) return;
 
+        const container = canvas.parentElement;
         const w = container.clientWidth || 400;
         const h = container.clientHeight || 400;
         canvas.width = w;
@@ -593,30 +590,24 @@
         renderer.setSize(w, h);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // Свет для шара (не нужен, но добавим для фона)
-        scene.add(new THREE.AmbientLight(0x333355, 0.5));
-
-        // ГРУППА
         const group = new THREE.Group();
         scene.add(group);
 
-        // ЧАСТИЦЫ (неоновый шар)
-        const particlesCount = 800;
-        const positions = new Float32Array(particlesCount * 3);
-        const colors = new Float32Array(particlesCount * 3);
+        // Частицы
+        const count = 800;
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
         const radius = 1.2;
 
-        for (let i = 0; i < particlesCount; i++) {
+        for (let i = 0; i < count; i++) {
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
             const r = radius * Math.cbrt(Math.random());
             positions[i * 3] = Math.sin(phi) * Math.cos(theta) * r;
             positions[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
             positions[i * 3 + 2] = Math.cos(phi) * r;
-
-            // Случайный цвет от мадженты до зелёного
             const mix = Math.random();
-            colors[i * 3] = mix * 1.0 + (1 - mix) * 0.0;
+            colors[i * 3] = mix * 1.0;
             colors[i * 3 + 1] = (1 - mix) * 0.5 + mix * 0.8;
             colors[i * 3 + 2] = (1 - mix) * 1.0 + mix * 0.0;
         }
@@ -633,11 +624,9 @@
             blending: THREE.AdditiveBlending,
             sizeAttenuation: true,
         });
+        group.add(new THREE.Points(geo, mat));
 
-        const particles = new THREE.Points(geo, mat);
-        group.add(particles);
-
-        // Второе облако (мелкие частицы)
+        // Мелкие частицы
         const smallCount = 400;
         const smallPos = new Float32Array(smallCount * 3);
         for (let i = 0; i < smallCount; i++) {
@@ -658,10 +647,9 @@
             blending: THREE.AdditiveBlending,
             sizeAttenuation: true,
         });
-        const smallParticles = new THREE.Points(smallGeo, smallMat);
-        group.add(smallParticles);
+        group.add(new THREE.Points(smallGeo, smallMat));
 
-        // УПРАВЛЕНИЕ
+        // Управление
         let isDragging = false;
         let prevMouse = { x: 0, y: 0 };
         let autoRotate = true;
@@ -686,7 +674,6 @@
             setTimeout(() => { autoRotate = true; }, 3000);
         });
 
-        // АНИМАЦИЯ
         function animate() {
             requestAnimationFrame(animate);
             if (autoRotate) {
@@ -697,7 +684,6 @@
         }
         animate();
 
-        // АДАПТИВ
         function resize() {
             const rect = container.getBoundingClientRect();
             const w = rect.width || 400;
@@ -711,30 +697,29 @@
         window.addEventListener('resize', resize);
         setTimeout(resize, 200);
         setTimeout(resize, 500);
-        console.log('✅ Неоновый шар запущен');
     })();
 
     // ================================================================
-    // 2. 3D-МОДЕЛЬ ЧИПСА НА БЕЛОМ ФОНЕ
+    // 2. ЧИПС НА БЕЛОМ ФОНЕ (НА ВСЮ ШИРИНУ)
     // ================================================================
     (function() {
         const canvas = document.getElementById('chip3d');
-        const container = document.getElementById('chip-container');
+        const container = canvas.parentElement;
         const loadingOverlay = document.getElementById('loading-overlay');
         const progressText = document.getElementById('progress-text');
 
         if (!canvas || !container) return;
 
-        const w = container.clientWidth || 400;
-        const h = container.clientHeight || 400;
+        const w = container.clientWidth || 800;
+        const h = container.clientHeight || 600;
         canvas.width = w;
         canvas.height = h;
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xffffff);
 
-        const camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
-        camera.position.set(4, 3, 6);
+        const camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 100);
+        camera.position.set(4, 3, 7);
         camera.lookAt(0, 0, 0);
 
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -743,28 +728,25 @@
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.2;
 
-        let isDragging = false;
-        let prevMouse = { x: 0, y: 0 };
-        let autoRotate = true;
         const group = new THREE.Group();
         scene.add(group);
 
-        // СВЕТ (для белого фона)
         scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-        const light1 = new THREE.DirectionalLight(0xffffff, 2);
-        light1.position.set(5, 8, 6);
-        scene.add(light1);
-        const light2 = new THREE.DirectionalLight(0xffdd99, 1);
-        light2.position.set(-4, 2, 4);
-        scene.add(light2);
-        const light3 = new THREE.DirectionalLight(0x99ccff, 0.8);
-        light3.position.set(0, -2, 5);
-        scene.add(light3);
+        const l1 = new THREE.DirectionalLight(0xffffff, 2);
+        l1.position.set(5, 8, 6);
+        scene.add(l1);
+        const l2 = new THREE.DirectionalLight(0xffdd99, 1);
+        l2.position.set(-4, 2, 4);
+        scene.add(l2);
+        const l3 = new THREE.DirectionalLight(0x99ccff, 0.8);
+        l3.position.set(0, -2, 5);
+        scene.add(l3);
 
-        // ЗАГРУЗКА МОДЕЛИ
-        let modelLoaded = false;
+        let isDragging = false;
+        let prevMouse = { x: 0, y: 0 };
+        let autoRotate = true;
+
         const loader = new THREE.GLTFLoader();
-
         loader.load(
             'scene.glb',
             (gltf) => {
@@ -772,49 +754,28 @@
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                if (maxDim > 0) {
-                    model.scale.set(1.8 / maxDim, 1.8 / maxDim, 1.8 / maxDim);
-                }
+                if (maxDim > 0) model.scale.set(1.8 / maxDim, 1.8 / maxDim, 1.8 / maxDim);
                 const center = box.getCenter(new THREE.Vector3());
                 model.position.sub(center);
                 group.add(model);
-                modelLoaded = true;
                 loadingOverlay.style.display = 'none';
-                console.log('✅ Модель чипса загружена на белом фоне!');
             },
             (xhr) => {
                 const percent = Math.round((xhr.loaded / xhr.total) * 100);
                 progressText.textContent = percent + '%';
             },
-            (error) => {
-                console.warn('❌ scene.glb не загрузился');
+            () => {
                 loadingOverlay.style.display = 'none';
-                // Если модель не загрузилась — показываем тестовый чипс
-                createTestChip();
+                // Заглушка
+                const g = new THREE.CylinderGeometry(1.2, 1.2, 0.12, 48);
+                const m = new THREE.MeshStandardMaterial({ color: 0xe8b84b, roughness: 0.7, flatShading: true });
+                const mesh = new THREE.Mesh(g, m);
+                mesh.rotation.x = 0.3;
+                mesh.rotation.z = 0.2;
+                group.add(mesh);
             }
         );
 
-        function createTestChip() {
-            const chipGroup = new THREE.Group();
-            const discGeo = new THREE.CylinderGeometry(1.2, 1.2, 0.12, 48);
-            const discMat = new THREE.MeshStandardMaterial({
-                color: 0xe8b84b,
-                emissive: 0xcc8833,
-                emissiveIntensity: 0.05,
-                metalness: 0.05,
-                roughness: 0.7,
-                flatShading: true,
-            });
-            const disc = new THREE.Mesh(discGeo, discMat);
-            chipGroup.add(disc);
-            chipGroup.rotation.x = 0.3;
-            chipGroup.rotation.z = 0.2;
-            chipGroup.scale.set(0.9, 0.9, 0.9);
-            group.add(chipGroup);
-            console.log('🟡 Тестовый чипс на белом фоне');
-        }
-
-        // УПРАВЛЕНИЕ
         canvas.addEventListener('mousedown', (e) => {
             isDragging = true;
             autoRotate = false;
@@ -835,7 +796,6 @@
             setTimeout(() => { autoRotate = true; }, 3000);
         });
 
-        // АНИМАЦИЯ
         function animate() {
             requestAnimationFrame(animate);
             if (autoRotate) {
@@ -848,8 +808,8 @@
 
         function resize() {
             const rect = container.getBoundingClientRect();
-            const w = rect.width || 400;
-            const h = rect.height || 400;
+            const w = rect.width || 800;
+            const h = rect.height || 600;
             canvas.width = w;
             canvas.height = h;
             renderer.setSize(w, h);
@@ -859,10 +819,8 @@
         window.addEventListener('resize', resize);
         setTimeout(resize, 200);
         setTimeout(resize, 500);
-        console.log('🎬 3D-чипс на белом фоне запущен');
     })();
 </script>
-
     <script>
         // Курсор
         const cursor = document.getElementById('cursor');
