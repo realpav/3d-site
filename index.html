@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Клуб любителей чипсов Lorenz</title>
-    <meta name="description" content="Клуб любителей чипсов Lorenz — всё о чипсах, вкусах, истории и культуре. Присоединяйся к нам!" />
+    <title>ХРУСТ • ПАНК • LORENZ</title>
+
+    <!-- Шрифты: брутальный + гранж -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+
     <style>
-        /* ===== ОБЩИЕ СТИЛИ ===== */
+        /* ----- СБРОС И БАЗА ----- */
         * {
             margin: 0;
             padding: 0;
@@ -14,377 +19,570 @@
         }
 
         body {
-            background: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #1a1a1a;
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0a;
+            color: #f5f0e8;
+            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* ===== ХЕДЕР С ВИДЕО ===== */
-        .header {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            background: #f5f0eb;
-            cursor: pointer;
-        }
-
-        .header video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
+        /* ----- ФОН: АНИМИРОВАННЫЙ ГРАДИЕНТ + ШУМ ----- */
+        .bg {
+            position: fixed;
             top: 0;
             left: 0;
-            display: block;
-            opacity: 1;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 20% 50%, #ff00cc 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, #00ff88 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, #ffcc00 0%, transparent 50%),
+                #0a0a0a;
+            background-blend-mode: screen;
+            animation: gradientMove 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                transform: scale(1.2) rotate(3deg);
+            }
+        }
+
+        /* Шумовая текстура (поверх градиента) */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
             pointer-events: none;
-            background: #f5f0eb;
         }
 
-        .header-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* ----- ОСНОВНОЙ КОНТЕЙНЕР ----- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 40px 60px;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ----- ЛЕВАЯ ЧАСТЬ: ТЕКСТ ----- */
+        .text-block {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            z-index: 2;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.25);
-            transition: background 0.5s ease;
+            gap: 24px;
         }
 
-        .header:hover .header-overlay {
-            background: rgba(0, 0, 0, 0.15);
-        }
-
-        /* ===== ЗАГОЛОВОК В СТИЛЕ LORENZ (ТОНКИЙ) ===== */
-        .header-overlay h1 {
-            font-size: clamp(2.5rem, 8vw, 5.5rem);
-            font-weight: 300;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #E30613;
-            text-shadow: 
-                0 2px 10px rgba(227, 6, 19, 0.15),
-                0 4px 30px rgba(0, 0, 0, 0.25);
-            letter-spacing: 3px;
+        .badge {
+            display: inline-block;
+            background: rgba(255, 0, 204, 0.2);
+            color: #ff00cc;
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
             text-transform: uppercase;
+            width: fit-content;
+            border: 1px solid rgba(255, 0, 204, 0.3);
+            animation: pulseBadge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(255, 0, 204, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 0, 204, 0.5);
+            }
+        }
+
+        .title {
+            font-size: 64px;
+            font-weight: 700;
             line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: -2px;
         }
 
-        .header-overlay h1 .light {
-            color: #ffffff;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
-            font-weight: 300;
+        .title .line1 {
+            color: #fff;
+        }
+        .title .line2 {
+            background: linear-gradient(135deg, #ff00cc, #ffcc00, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            animation: textShift 4s ease-in-out infinite;
         }
 
-        .header-overlay p {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            color: #ffffff;
-            opacity: 0.85;
-            margin-top: 10px;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
-            font-weight: 300;
-            letter-spacing: 3px;
+        @keyframes textShift {
+            0%,
+            100% {
+                transform: skewX(0deg);
+            }
+            50% {
+                transform: skewX(-4deg);
+            }
         }
 
-        .header-overlay .hint {
-            margin-top: 30px;
-            font-size: 0.9rem;
-            opacity: 0.5;
-            color: #ffffff;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
-            animation: pulse 2s ease-in-out infinite;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-        }
-
-        /* ===== РАЗДЕЛИТЕЛЬНАЯ СЕКЦИЯ ===== */
-        .divider-section {
-            padding: 80px 20px;
-            background: #ffffff;
-            text-align: center;
-            border-top: 1px solid #f0ebe6;
-            border-bottom: 1px solid #f0ebe6;
-        }
-
-        .divider-section .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .divider-section h2 {
-            font-size: 2.2rem;
-            font-weight: 300;
-            color: #E30613;
-            margin-bottom: 16px;
-            letter-spacing: 2px;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .divider-section .sub {
-            font-size: 1.1rem;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-weight: 300;
-        }
-
-        .divider-section .divider-line {
-            width: 80px;
-            height: 2px;
-            background: #E30613;
-            margin: 0 auto 20px;
-            border-radius: 2px;
-        }
-
-        /* ===== 3D-БЛОК ===== */
-        .model-section {
-            width: 100%;
-            height: 100vh;
-            background: #ffffff;
+        .title .line3 {
+            color: #fff;
             position: relative;
+            display: inline-block;
         }
 
-        model-viewer {
+        .title .line3::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: #ffffff;
-            cursor: grab;
+            height: 8px;
+            background: #ff00cc;
+            opacity: 0.3;
+            transform: rotate(-2deg);
         }
 
-        model-viewer:active {
-            cursor: grabbing;
+        .desc {
+            font-size: 18px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 480px;
+            font-weight: 400;
+            border-left: 3px solid #ff00cc;
+            padding-left: 20px;
         }
 
-        /* ===== ПРЕЛОАДЕР ===== */
-        #loader {
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: #ff00cc;
+            color: #0a0a0a;
+            box-shadow: 0 0 30px rgba(255, 0, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 60px rgba(255, 0, 204, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.1);
+        }
+
+        /* ----- ПРАВАЯ ЧАСТЬ: 3D + ИНТЕРАКТИВ ----- */
+        .model-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .model-container {
+            width: 100%;
+            max-width: 550px;
+            aspect-ratio: 1/1;
+            position: relative;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 80px rgba(255, 0, 204, 0.05);
+            overflow: hidden;
+        }
+
+        .model-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+
+        /* Эффект "свечения" вокруг 3D-контейнера */
+        .model-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            background: conic-gradient(from 0deg, #ff00cc, #ffcc00, #00ff88, #ff00cc);
+            z-index: -1;
+            opacity: 0.3;
+            animation: rotateBorder 6s linear infinite;
+        }
+
+        @keyframes rotateBorder {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Индикатор загрузки (стильный) */
+        .loading-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 16px;
+            background: #0a0a0a;
+            border-radius: 20px;
             z-index: 10;
-            color: #1a1a1a;
+            transition: opacity 0.8s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
             pointer-events: none;
         }
 
-        #loader .bar {
-            width: 300px;
-            max-width: 80%;
-            height: 4px;
-            background: #e0d6cc;
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 10px;
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(255, 0, 204, 0.1);
+            border-top-color: #ff00cc;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
         }
 
-        #loader .progress {
-            width: 0%;
-            height: 100%;
-            background: #E30613;
-            transition: width 0.2s ease;
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        #loader #progress-text {
-            margin-top: 12px;
+        .loading-text {
             font-size: 14px;
-            color: #888;
-            font-weight: 300;
-        }
-
-        /* ===== SEO-ТЕКСТ ===== */
-        .seo-section {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 30px 80px;
-            background: #ffffff;
-            color: #1a1a1a;
-        }
-
-        .seo-section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            font-weight: 300;
-            color: #E30613;
-            font-family: Arial, Helvetica, sans-serif;
+            color: rgba(255, 255, 255, 0.4);
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .seo-section p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 16px;
-            color: #2c2c2c;
-            font-family: Arial, Helvetica, sans-serif;
-            font-weight: 300;
+        .loading-text span {
+            color: #ff00cc;
+            font-weight: 700;
         }
 
-        .seo-section strong {
-            color: #E30613;
-            font-weight: 400;
+        /* ----- ФУТЕР (панковский) ----- */
+        .footer {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* ===== АДАПТАЦИЯ ===== */
-        @media (max-width: 768px) {
-            .header, .model-section {
-                height: 100vh;
+        .footer a {
+            color: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #ff00cc;
+        }
+
+        .footer .punk {
+            color: rgba(255, 0, 204, 0.3);
+        }
+
+        /* ----- АДАПТИВ ----- */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 30px 20px 40px;
+                text-align: center;
             }
-            .divider-section {
-                padding: 50px 16px;
+            .text-block {
+                align-items: center;
             }
-            .divider-section h2 {
-                font-size: 1.6rem;
+            .desc {
+                max-width: 100%;
+                text-align: center;
+                border-left: none;
+                padding-left: 0;
             }
-            .seo-section {
-                padding: 40px 20px 60px;
+            .btn-group {
+                justify-content: center;
+            }
+            .badge {
+                margin: 0 auto;
+            }
+            .title {
+                font-size: 48px;
+            }
+            .model-container {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            .footer {
+                flex-direction: column;
+                gap: 8px;
+                padding: 16px 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 32px;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 12px;
+            }
+            .model-container {
+                max-width: 300px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== ХЕДЕР С ВИДЕО ===== -->
-    <header class="header" id="header">
-        <video muted playsinline id="header-video" poster="">
-            <source src="video-potato.mp4" type="video/mp4" />
-            Ваш браузер не поддерживает видео.
-        </video>
+    <!-- ФОН -->
+    <div class="bg"></div>
+    <div class="noise"></div>
 
-        <div class="header-overlay">
-            <h1>
-                <span class="light">Клуб любителей</span><br />
-                чипсов Lorenz
+    <!-- ===== ОСНОВНАЯ СЕТКА ===== -->
+    <div class="container">
+
+        <!-- ЛЕВАЯ ЧАСТЬ: ТЕКСТ -->
+        <div class="text-block">
+            <span class="badge">⚡ ХРУСТ КАК ИСКУССТВО</span>
+            <h1 class="title">
+                <span class="line1">Ломай</span><br />
+                <span class="line2">стереотипы</span><br />
+                <span class="line3">хрусти</span>
             </h1>
-            <p>Наведи мышку — картошка оживёт</p>
-            <div class="hint">⬇️ Листай вниз</div>
-        </div>
-    </header>
-
-    <!-- ===== РАЗДЕЛИТЕЛЬНАЯ СЕКЦИЯ ===== -->
-    <section class="divider-section">
-        <div class="container">
-            <h2>От картофеля до хруста</h2>
-            <div class="divider-line"></div>
-            <p class="sub">
-                Мы знаем, как вырастить идеальный картофель, превратить его в золотистый чипс и подарить тебе мгновение настоящего удовольствия. 
-                А теперь — смотри, как наша 3D-модель раскрывает секреты совершенного хруста.
+            <p class="desc">
+                Мы не делаем чипсы. Мы создаём хруст, который ломает шаблоны.
+                Натуральный картофель + бунтарский подход = твой идеальный вкус.
             </p>
-        </div>
-    </section>
-
-    <!-- ===== 3D-МОДЕЛЬ ===== -->
-    <section class="model-section" id="model-section">
-        <div id="loader">
-            <h3>⏳ Загрузка 3D-модели</h3>
-            <div class="bar">
-                <div class="progress" id="progress-bar"></div>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary">Взорвать вкус</a>
+                <a href="#" class="btn btn-secondary">Узнать тайну</a>
             </div>
-            <p id="progress-text">0%</p>
         </div>
 
-        <model-viewer
-            id="model"
-            src="scene.glb"
-            alt="3D-модель чипсов Lorenz"
-            auto-rotate
-            camera-controls
-            shadow-intensity="0.5"
-            exposure="1.2"
-            ar
-            interaction-prompt="none"
-            style="background: #ffffff;"
-        >
-        </model-viewer>
-    </section>
+        <!-- ПРАВАЯ ЧАСТЬ: 3D -->
+        <div class="model-wrapper">
+            <div class="model-container" id="model-container">
+                <!-- Индикатор загрузки -->
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Загрузка <span id="progress-text">0%</span></div>
+                </div>
+            </div>
+        </div>
 
-    <!-- ===== SEO-ТЕКСТ ===== -->
-    <section class="seo-section">
-        <h2>О клубе любителей чипсов Lorenz</h2>
-        <p>
-            <strong>Клуб любителей чипсов Lorenz</strong> — это сообщество настоящих ценителей хрустящего вкуса и качественных снеков. 
-            Мы объединяем тех, кто знает толк в идеально приготовленном картофеле, кто ценит традиции немецкого качества и любит экспериментировать с новыми вкусами.
-        </p>
-        <p>
-            Чипсы <strong>Lorenz</strong> — это не просто перекус. Это символ уюта, дружеских посиделок и искреннего удовольствия. 
-            На протяжении десятилетий бренд Lorenz радует своих поклонников неизменно высоким качеством: хрустящая текстура, натуральные ингредиенты, 
-            сбалансированный вкус и внимание к каждой детали производства. Каждый чипс — это маленькое произведение искусства.
-        </p>
-        <p>
-            В нашем клубе мы делимся новостями о новинках, обсуждаем любимые вкусы — от классической соли до пикантного паприки, 
-            организуем дегустации и конкурсы. Мы знаем, как правильно выбрать чипсы к фильму, к пиву или просто для поднятия настроения. 
-            Присоединяйся к нам, если ты тоже считаешь, что идеальный хруст — это не случайность, а результат мастерства.
-        </p>
-        <p>
-            <strong>Lorenz</strong> — это больше чем бренд. Это философия вкуса, проверенная временем. Мы гордимся тем, что в каждой пачке — 
-            любовь к картофелю, уважение к традициям и стремление радовать каждого, кто выбирает качество. 
-            Стань частью нашего клуба, и ты откроешь для себя мир чипсов заново!
-        </p>
-        <p style="margin-top: 20px; font-style: italic; color: #888; font-weight: 300;">
-            #КлубЛюбителейЧипсовLorenz #ХрустиПоНастоящему
-        </p>
-    </section>
+    </div>
 
-    <!-- ===== ПОДКЛЮЧАЕМ MODEL-VIEWER ===== -->
+    <!-- ===== ФУТЕР ===== -->
+    <div class="footer">
+        <span>© 2026 <span class="punk">✦</span> Клуб бунтарей Lorenz</span>
+        <span>
+            <a href="#">Instagram</a> •
+            <a href="#">Telegram</a> •
+            <a href="#">ВКонтакте</a>
+        </span>
+    </div>
+
+    <!-- ===== THREE.JS ===== -->
     <script type="importmap">
-    {
-        "imports": {
-            "@google/model-viewer": "https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
         }
-    }
     </script>
 
     <script type="module">
-        import '@google/model-viewer';
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        const modelViewer = document.getElementById('model');
-        const progressBar = document.getElementById('progress-bar');
+        // --- Контейнер ---
+        const container = document.getElementById('model-container');
+        const loadingOverlay = document.getElementById('loading-overlay');
         const progressText = document.getElementById('progress-text');
-        const loader = document.getElementById('loader');
 
-        modelViewer.addEventListener('progress', (event) => {
-            const percent = Math.round(event.detail.totalProgress * 100);
-            progressBar.style.width = percent + '%';
-            progressText.textContent = percent + '%';
-            if (percent >= 100) loader.style.display = 'none';
+        // --- Сцена ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a0a);
+
+        // --- Камера ---
+        const camera = new THREE.PerspectiveCamera(30, container.clientWidth / container.clientHeight, 0.1, 100);
+        camera.position.set(5, 2, 7);
+        camera.lookAt(0, 0, 0);
+
+        // --- Рендерер ---
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: false
+        });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.5;
+        container.appendChild(renderer.domElement);
+
+        // --- Управление ---
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 2.0;
+        controls.minDistance = 3;
+        controls.maxDistance = 15;
+        controls.target.set(0, 0, 0);
+
+        // --- Свет: неоновый + драматичный ---
+        const ambient = new THREE.AmbientLight(0x222244, 0.5);
+        scene.add(ambient);
+
+        const key = new THREE.DirectionalLight(0xff00cc, 2.0);
+        key.position.set(3, 5, 4);
+        scene.add(key);
+
+        const fill = new THREE.DirectionalLight(0x00ff88, 1.0);
+        fill.position.set(-4, 2, -2);
+        scene.add(fill);
+
+        const rim = new THREE.DirectionalLight(0xffcc00, 0.8);
+        rim.position.set(-2, 1, 6);
+        scene.add(rim);
+
+        // Подсветка снизу
+        const bottom = new THREE.PointLight(0xff00cc, 0.5, 10);
+        bottom.position.set(0, -3, 0);
+        scene.add(bottom);
+
+        // --- Загрузка модели ---
+        const loader = new GLTFLoader();
+        const modelPath = 'scene.glb';
+
+        loader.load(
+            modelPath,
+            (gltf) => {
+                const model = gltf.scene;
+                model.scale.set(1.5, 1.5, 1.5);
+                model.position.y = -0.5;
+                scene.add(model);
+
+                loadingOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 800);
+            },
+            (xhr) => {
+                const percent = Math.round((xhr.loaded / xhr.total) * 100);
+                progressText.textContent = percent + '%';
+            },
+            (error) => {
+                console.error('Ошибка:', error);
+                loadingOverlay.innerHTML = `
+                    <div style="color:#ff00cc;font-size:32px;">✖</div>
+                    <div style="color:rgba(255,255,255,0.4);font-size:14px;">3D не загрузился</div>
+                    <div style="color:rgba(255,255,255,0.2);font-size:12px;">Но хруст остаётся</div>
+                `;
+            }
+        );
+
+        // --- Ресайз ---
+        function resize() {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            renderer.setSize(w, h);
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+        }
+
+        window.addEventListener('resize', resize);
+        setTimeout(resize, 100);
+
+        // --- Анимация ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Отключаем автовращение при взаимодействии
+        renderer.domElement.addEventListener('pointerdown', () => {
+            controls.autoRotate = false;
+        });
+        renderer.domElement.addEventListener('pointerup', () => {
+            setTimeout(() => {
+                controls.autoRotate = true;
+            }, 3000);
         });
 
-        modelViewer.addEventListener('load', () => {
-            loader.style.display = 'none';
-        });
-
-        const header = document.getElementById('header');
-        const video = document.getElementById('header-video');
-
-        video.pause();
-
-        header.addEventListener('mouseenter', () => {
-            video.play().catch(() => {});
-        });
-
-        header.addEventListener('mouseleave', () => {
-            video.pause();
-        });
-
-        console.log('🥔 Клуб любителей чипсов Lorenz готов!');
+        // Запасной таймер для загрузки
+        setTimeout(() => {
+            if (!loadingOverlay.classList.contains('hidden')) {
+                loadingOverlay.classList.add('hidden');
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 800);
+            }
+        }, 15000);
     </script>
 
 </body>
