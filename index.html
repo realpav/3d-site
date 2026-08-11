@@ -229,7 +229,7 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
-            background: #0a0a0a;
+            background: transparent;
             scroll-margin-top: 0;
         }
 
@@ -237,8 +237,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.7;
-            filter: saturate(0.9) contrast(1.05);
             position: absolute;
             top: 0;
             left: 0;
@@ -253,8 +251,8 @@
             height: 100%;
             padding: 60px 40px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(2px);
             z-index: 2;
             display: flex;
             flex-direction: column;
@@ -498,7 +496,7 @@
 
     <!-- ===== ВИДЕО-БЛОК (ПОЛНЫЙ ЭКРАН) ===== -->
     <section class="video-section" id="video-section">
-        <video autoplay muted loop playsinline>
+        <video id="mainVideo" autoplay muted loop playsinline>
             <source src="video-potato.mp4" type="video/mp4">
         </video>
         <div class="overlay-text">
@@ -569,6 +567,12 @@
         const loadingOverlay = document.getElementById('loading-overlay');
         const progressText = document.getElementById('progress-text');
 
+        // Проверяем, есть ли контейнер
+        if (!container) {
+            console.error('Контейнер 3D не найден');
+            return;
+        }
+
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x0a0a0a);
 
@@ -591,6 +595,7 @@
         controls.maxDistance = 15;
         controls.target.set(0, 0, 0);
 
+        // Свет
         scene.add(new THREE.AmbientLight(0x222244, 0.5));
         const key = new THREE.DirectionalLight(0xff00cc, 2.0);
         key.position.set(3, 5, 4);
@@ -605,6 +610,7 @@
         bottom.position.set(0, -3, 0);
         scene.add(bottom);
 
+        // Загрузка модели
         const loader = new GLTFLoader();
         loader.load(
             'scene.glb',
@@ -620,7 +626,8 @@
                 const percent = Math.round((xhr.loaded / xhr.total) * 100);
                 progressText.textContent = percent + '%';
             },
-            () => {
+            (error) => {
+                console.warn('Ошибка загрузки 3D:', error);
                 loadingOverlay.innerHTML = `
                     <div style="color:#ff00cc;font-size:28px;">✖</div>
                     <div style="color:rgba(255,255,255,0.3);font-size:13px;">3D не загрузился</div>
@@ -629,16 +636,20 @@
             }
         );
 
+        // Ресайз
         function resize() {
             const w = container.clientWidth;
             const h = container.clientHeight;
-            renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
+            if (w > 0 && h > 0) {
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+            }
         }
         window.addEventListener('resize', resize);
-        setTimeout(resize, 100);
+        setTimeout(resize, 200);
 
+        // Анимация
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -646,20 +657,22 @@
         }
         animate();
 
+        // Отключаем автовращение при взаимодействии
         renderer.domElement.addEventListener('pointerdown', () => { controls.autoRotate = false; });
         renderer.domElement.addEventListener('pointerup', () => {
             setTimeout(() => { controls.autoRotate = true; }, 3000);
         });
 
+        // Скрываем загрузку через 10 секунд, даже если модель не загрузилась
         setTimeout(() => {
             if (loadingOverlay.style.opacity !== '0') {
                 loadingOverlay.style.opacity = '0';
                 setTimeout(() => { loadingOverlay.style.display = 'none'; }, 800);
             }
-        }, 15000);
+        }, 10000);
     </script>
 
-    <!-- ===== КУРСОР + СКРОЛЛ ===== -->
+    <!-- ===== КУРСОР + СКРОЛЛ + ВИДЕО ===== -->
     <script>
         // ----- КУРСОР -----
         const cursor = document.getElementById('cursor');
@@ -681,11 +694,18 @@
             });
         });
 
-        // ----- ПЛАВНЫЙ СКРОЛЛ (гарантированно работает) -----
+        // ----- ПЛАВНЫЙ СКРОЛЛ -----
         document.getElementById('btn-explode').addEventListener('click', () => {
             const target = document.getElementById('video-section');
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Принудительно запускаем видео после скролла
+                setTimeout(() => {
+                    const video = document.getElementById('mainVideo');
+                    if (video) {
+                        video.play().catch(() => {});
+                    }
+                }, 500);
             }
         });
 
@@ -693,6 +713,27 @@
             const target = document.getElementById('three-d-section');
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // ----- ПРИНУДИТЕЛЬНЫЙ ЗАПУСК ВИДЕО ПРИ ЗАГРУЗКЕ -----
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('mainVideo');
+            if (video) {
+                // Пытаемся запустить видео сразу
+                video.play().catch(() => {
+                    // Если не получилось — запускаем по клику где угодно
+                    document.addEventListener('click', () => {
+                        video.play().catch(() => {});
+                    }, { once: true });
+                });
+            }
+        });
+
+        // Дополнительно: если видео остановилось — перезапускаем
+        document.getElementById('mainVideo')?.addEventListener('pause', function() {
+            if (this.readyState > 0) {
+                this.play().catch(() => {});
             }
         });
     </script>
