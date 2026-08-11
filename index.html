@@ -223,7 +223,7 @@
             color: #00ff88;
         }
 
-        /* ----- ВИДЕО-БЛОК (на весь экран) ----- */
+        /* ----- ВИДЕО-БЛОК (ПОЛНОСТЬЮ ПРОЗРАЧНЫЙ) ----- */
         .video-section {
             width: 100%;
             height: 100vh;
@@ -251,8 +251,8 @@
             height: 100%;
             padding: 60px 40px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(2px);
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(1px);
             z-index: 2;
             display: flex;
             flex-direction: column;
@@ -263,7 +263,7 @@
         .video-section .overlay-text .content {
             max-width: 800px;
             color: #f5f0e8;
-            text-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
         }
 
         .video-section .overlay-text h2 {
@@ -275,7 +275,7 @@
         }
 
         .video-section .overlay-text h2 span {
-            background: linear-gradient(135deg, #ff00cc, #ffcc00);
+            background: linear-gradient(135deg, #ff00cc, #ffcc00, #00ff88);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -283,12 +283,27 @@
         .video-section .overlay-text p {
             font-size: 17px;
             line-height: 1.9;
-            color: rgba(255, 255, 255, 0.9);
             margin-bottom: 16px;
             text-align: left;
         }
 
-        /* ----- 3D-БЛОК (футер) ----- */
+        .video-section .overlay-text p strong {
+            color: #ff00cc;
+        }
+
+        .video-section .overlay-text p:not(:first-of-type) {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .video-section .overlay-text .hashtag {
+            color: #ff00cc;
+            font-weight: 700;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        /* ----- 3D-БЛОК (ФУТЕР) ----- */
         .three-d-section {
             width: 100%;
             min-height: 100vh;
@@ -360,6 +375,27 @@
             to {
                 transform: rotate(360deg);
             }
+        }
+
+        /* Заглушка для 3D, если модель не загрузилась */
+        .model-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: radial-gradient(circle at center, #1a1a1a, #0a0a0a);
+        }
+
+        .model-placeholder .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
         }
 
         /* ----- ФУТЕР (низ) ----- */
@@ -494,7 +530,7 @@
         </div>
     </header>
 
-    <!-- ===== ВИДЕО-БЛОК (ПОЛНЫЙ ЭКРАН) ===== -->
+    <!-- ===== ВИДЕО-БЛОК (ПОЛНОСТЬЮ ПРОЗРАЧНЫЙ) ===== -->
     <section class="video-section" id="video-section">
         <video id="mainVideo" autoplay muted loop playsinline>
             <source src="video-potato.mp4" type="video/mp4">
@@ -514,9 +550,7 @@
                 <p>
                     Lorenz — это больше чем бренд. Это философия вкуса, проверенная временем. Мы гордимся тем, что в каждой пачке — любовь к картофелю, уважение к традициям и стремление радовать каждого, кто выбирает качество. Стань частью нашего клуба, и ты откроешь для себя мир чипсов заново!
                 </p>
-                <p style="color:#ff00cc; font-weight:700; margin-top:20px; text-align:center;">
-                    #КлубЛюбителейЧипсовLorenz #ХрустиПоНастоящему
-                </p>
+                <p class="hashtag">#КлубЛюбителейЧипсовLorenz #ХрустиПоНастоящему</p>
             </div>
         </div>
     </section>
@@ -567,11 +601,7 @@
         const loadingOverlay = document.getElementById('loading-overlay');
         const progressText = document.getElementById('progress-text');
 
-        // Проверяем, есть ли контейнер
-        if (!container) {
-            console.error('Контейнер 3D не найден');
-            return;
-        }
+        if (!container) return;
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x0a0a0a);
@@ -595,7 +625,6 @@
         controls.maxDistance = 15;
         controls.target.set(0, 0, 0);
 
-        // Свет
         scene.add(new THREE.AmbientLight(0x222244, 0.5));
         const key = new THREE.DirectionalLight(0xff00cc, 2.0);
         key.position.set(3, 5, 4);
@@ -610,8 +639,9 @@
         bottom.position.set(0, -3, 0);
         scene.add(bottom);
 
-        // Загрузка модели
         const loader = new GLTFLoader();
+        let modelLoaded = false;
+
         loader.load(
             'scene.glb',
             (gltf) => {
@@ -619,6 +649,7 @@
                 model.scale.set(1.5, 1.5, 1.5);
                 model.position.y = -0.5;
                 scene.add(model);
+                modelLoaded = true;
                 loadingOverlay.style.opacity = '0';
                 setTimeout(() => { loadingOverlay.style.display = 'none'; }, 800);
             },
@@ -627,16 +658,18 @@
                 progressText.textContent = percent + '%';
             },
             (error) => {
-                console.warn('Ошибка загрузки 3D:', error);
+                console.warn('3D не загрузился:', error);
                 loadingOverlay.innerHTML = `
-                    <div style="color:#ff00cc;font-size:28px;">✖</div>
-                    <div style="color:rgba(255,255,255,0.3);font-size:13px;">3D не загрузился</div>
-                    <div style="color:rgba(255,255,255,0.15);font-size:11px;">Хруст остаётся</div>
+                    <div style="color:#ff00cc;font-size:48px;margin-bottom:10px;">🥔</div>
+                    <div style="color:rgba(255,255,255,0.3);font-size:14px;">3D-модель не загрузилась</div>
+                    <div style="color:rgba(255,255,255,0.1);font-size:12px;">Но хруст остаётся с тобой</div>
                 `;
+                setTimeout(() => {
+                    loadingOverlay.style.opacity = '0.6';
+                }, 3000);
             }
         );
 
-        // Ресайз
         function resize() {
             const w = container.clientWidth;
             const h = container.clientHeight;
@@ -649,7 +682,6 @@
         window.addEventListener('resize', resize);
         setTimeout(resize, 200);
 
-        // Анимация
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -657,17 +689,15 @@
         }
         animate();
 
-        // Отключаем автовращение при взаимодействии
         renderer.domElement.addEventListener('pointerdown', () => { controls.autoRotate = false; });
         renderer.domElement.addEventListener('pointerup', () => {
             setTimeout(() => { controls.autoRotate = true; }, 3000);
         });
 
-        // Скрываем загрузку через 10 секунд, даже если модель не загрузилась
+        // Если модель не загрузилась через 10 секунд — скрываем загрузку
         setTimeout(() => {
-            if (loadingOverlay.style.opacity !== '0') {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => { loadingOverlay.style.display = 'none'; }, 800);
+            if (!modelLoaded) {
+                loadingOverlay.style.opacity = '0.6';
             }
         }, 10000);
     </script>
@@ -699,7 +729,6 @@
             const target = document.getElementById('video-section');
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // Принудительно запускаем видео после скролла
                 setTimeout(() => {
                     const video = document.getElementById('mainVideo');
                     if (video) {
@@ -716,24 +745,15 @@
             }
         });
 
-        // ----- ПРИНУДИТЕЛЬНЫЙ ЗАПУСК ВИДЕО ПРИ ЗАГРУЗКЕ -----
+        // ----- ЗАПУСК ВИДЕО -----
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('mainVideo');
             if (video) {
-                // Пытаемся запустить видео сразу
                 video.play().catch(() => {
-                    // Если не получилось — запускаем по клику где угодно
                     document.addEventListener('click', () => {
                         video.play().catch(() => {});
                     }, { once: true });
                 });
-            }
-        });
-
-        // Дополнительно: если видео остановилось — перезапускаем
-        document.getElementById('mainVideo')?.addEventListener('pause', function() {
-            if (this.readyState > 0) {
-                this.play().catch(() => {});
             }
         });
     </script>
