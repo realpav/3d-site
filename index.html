@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&display=swap" rel="stylesheet" />
 
     <style>
-        /* ----- БАЗА ----- */
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +26,7 @@
             overflow-x: hidden;
         }
 
-        /* ----- ДИЗАЙНЕРСКИЙ КУРСОР ----- */
+        /* ----- КУРСОР ----- */
         .cursor {
             position: fixed;
             width: 40px;
@@ -62,7 +61,7 @@
             border-color: #00ff88;
         }
 
-        /* ----- ХИДЕР (ВЕСЬ ЭКРАН) ----- */
+        /* ----- ХИДЕР ----- */
         .header {
             width: 100%;
             min-height: 100vh;
@@ -251,7 +250,7 @@
             height: 100%;
             padding: 60px 40px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(1px);
             z-index: 2;
             display: flex;
@@ -262,11 +261,10 @@
 
         .video-section .overlay-text .content {
             max-width: 800px;
-            color: #f5f0e8;
             text-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
         }
 
-        /* ----- ВЕСЬ ТЕКСТ В ЦЕНТРАЛЬНОМ БЛОКЕ — ЦВЕТНОЙ! ----- */
+        /* ===== ВЕСЬ ТЕКСТ В ЦЕНТРЕ — ЦВЕТНОЙ ===== */
         .video-section .overlay-text h2 {
             font-size: 38px;
             font-weight: 800;
@@ -284,17 +282,20 @@
             line-height: 1.9;
             margin-bottom: 16px;
             text-align: left;
-            color: #f0e8d8;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(135deg, #f0e8d8, #ffccdd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .video-section .overlay-text p strong {
-            color: #ff00cc;
+            background: linear-gradient(135deg, #ff00cc, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 800;
         }
 
         .video-section .overlay-text .hashtag {
-            background: linear-gradient(135deg, #ff00cc, #ffcc00);
+            background: linear-gradient(135deg, #ff00cc, #ffcc00, #00ff88);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
@@ -305,7 +306,7 @@
             width: 100%;
         }
 
-        /* ----- 3D-БЛОК (ФУТЕР) ----- */
+        /* ----- 3D-БЛОК ----- */
         .three-d-section {
             width: 100%;
             min-height: 100vh;
@@ -379,7 +380,7 @@
             }
         }
 
-        /* ----- ФУТЕР (низ) ----- */
+        /* ----- ФУТЕР ----- */
         .footer {
             max-width: 1200px;
             margin: 0 auto;
@@ -487,7 +488,6 @@
 </head>
 <body>
 
-    <!-- ===== ДИЗАЙНЕРСКИЙ КУРСОР ===== -->
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
@@ -536,7 +536,7 @@
         </div>
     </section>
 
-    <!-- ===== 3D-БЛОК (ФУТЕР) ===== -->
+    <!-- ===== 3D-БЛОК ===== -->
     <section class="three-d-section" id="three-d-section">
         <div class="three-d-text">
             <h3>Тайна <span>идеального</span> хруста</h3>
@@ -704,7 +704,7 @@
             });
         });
 
-        // ----- ПЛАВНЫЙ СКРОЛЛ -----
+        // ----- СКРОЛЛ -----
         document.getElementById('btn-explode').addEventListener('click', () => {
             const target = document.getElementById('video-section');
             if (target) {
