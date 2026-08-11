@@ -22,81 +22,82 @@
             background: #0a0a0a;
             color: #f5f0e8;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* ----- ХИДЕР С ВИДЕО (ПАНК-СТИЛЬ) ----- */
-        .header-video {
-            width: 100%;
-            height: 50vh;
-            min-height: 320px;
-            max-height: 500px;
-            position: relative;
-            overflow: hidden;
-            background: #0a0a0a;
-            border-bottom: 2px solid rgba(255, 0, 204, 0.2);
-        }
-
-        .header-video video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.85;
-            filter: saturate(1.1) contrast(1.05);
-        }
-
-        /* Неоновый оверлей поверх видео */
-        .header-video .overlay {
-            position: absolute;
+        /* ----- ФОН: АНИМИРОВАННЫЙ ГРАДИЕНТ (как в прошлом хидере) ----- */
+        .bg {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: -1;
             background:
-                linear-gradient(135deg, rgba(255, 0, 204, 0.15) 0%, transparent 50%),
-                linear-gradient(225deg, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
-                rgba(0, 0, 0, 0.3);
-            z-index: 1;
+                radial-gradient(ellipse at 20% 50%, #ff00cc 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, #00ff88 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, #ffcc00 0%, transparent 50%),
+                #0a0a0a;
+            background-blend-mode: screen;
+            animation: gradientMove 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                transform: scale(1.2) rotate(3deg);
+            }
+        }
+
+        /* Шумовая текстура */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
             pointer-events: none;
         }
 
-        /* Панк-надпись поверх видео */
-        .header-video .title-overlay {
-            position: absolute;
-            bottom: 30px;
-            left: 40px;
-            z-index: 2;
-            font-size: 42px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            line-height: 1.1;
-            color: #fff;
-            text-shadow: 0 0 40px rgba(255, 0, 204, 0.3);
+        /* ----- ОСНОВНОЙ КОНТЕЙНЕР ----- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px 40px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .header-video .title-overlay span {
-            background: linear-gradient(135deg, #ff00cc, #ffcc00, #00ff88);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* ----- ГЛАВНЫЙ БЛОК ----- */
+        .hero {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .badge {
             display: inline-block;
-        }
-
-        .header-video .badge-overlay {
-            position: absolute;
-            top: 24px;
-            right: 40px;
-            z-index: 2;
             background: rgba(255, 0, 204, 0.15);
             color: #ff00cc;
-            padding: 6px 20px;
+            padding: 8px 24px;
             border-radius: 100px;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
             border: 1px solid rgba(255, 0, 204, 0.2);
-            backdrop-filter: blur(10px);
             animation: pulseBadge 2s ease-in-out infinite;
+            margin-bottom: 30px;
         }
 
         @keyframes pulseBadge {
@@ -105,66 +106,79 @@
                 box-shadow: 0 0 10px rgba(255, 0, 204, 0.2);
             }
             50% {
-                box-shadow: 0 0 30px rgba(255, 0, 204, 0.4);
+                box-shadow: 0 0 40px rgba(255, 0, 204, 0.4);
             }
         }
 
-        /* ----- ОСНОВНОЙ КОНТЕЙНЕР С 3D ----- */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 60px 40px 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        /* ----- ТЕКСТ ----- */
-        .text-block {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .text-block .sub {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .text-block h2 {
-            font-size: 44px;
+        .hero h1 {
+            font-size: 80px;
             font-weight: 800;
-            line-height: 1.1;
+            line-height: 1.05;
             text-transform: uppercase;
+            letter-spacing: -3px;
+            color: #fff;
         }
 
-        .text-block h2 .highlight {
-            background: linear-gradient(135deg, #ff00cc, #ffcc00);
+        .hero h1 .line1 {
+            display: block;
+        }
+
+        .hero h1 .line2 {
+            background: linear-gradient(135deg, #ff00cc, #ffcc00, #00ff88);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: inline-block;
+            animation: textShift 3s ease-in-out infinite;
         }
 
-        .text-block p {
-            font-size: 17px;
+        @keyframes textShift {
+            0%,
+            100% {
+                transform: skewX(0deg) scale(1);
+            }
+            50% {
+                transform: skewX(-3deg) scale(1.02);
+            }
+        }
+
+        .hero h1 .line3 {
+            display: block;
+            color: #fff;
+            position: relative;
+        }
+
+        .hero h1 .line3::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: #ff00cc;
+            opacity: 0.2;
+            transform: rotate(-1deg);
+        }
+
+        .hero p {
+            font-size: 20px;
             line-height: 1.7;
             color: rgba(255, 255, 255, 0.6);
-            max-width: 460px;
+            max-width: 580px;
+            margin: 24px auto 36px;
+            font-weight: 400;
         }
 
         .btn-group {
             display: flex;
-            gap: 14px;
+            gap: 16px;
+            justify-content: center;
             flex-wrap: wrap;
-            margin-top: 8px;
         }
 
         .btn {
-            padding: 14px 34px;
+            padding: 16px 44px;
             border: none;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
@@ -177,12 +191,12 @@
         .btn-primary {
             background: #ff00cc;
             color: #0a0a0a;
-            box-shadow: 0 0 30px rgba(255, 0, 204, 0.2);
+            box-shadow: 0 0 40px rgba(255, 0, 204, 0.2);
         }
 
         .btn-primary:hover {
-            transform: scale(1.04);
-            box-shadow: 0 0 60px rgba(255, 0, 204, 0.4);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 70px rgba(255, 0, 204, 0.4);
         }
 
         .btn-secondary {
@@ -194,60 +208,14 @@
         .btn-secondary:hover {
             border-color: #00ff88;
             color: #00ff88;
-        }
-
-        /* ----- 3D КОНТЕЙНЕР ----- */
-        .model-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .model-container {
-            width: 100%;
-            max-width: 500px;
-            aspect-ratio: 1/1;
-            position: relative;
-            border-radius: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 0 80px rgba(255, 0, 204, 0.04);
-            overflow: hidden;
-        }
-
-        .model-container canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
-        /* Светящаяся рамка */
-        .model-container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 22px;
-            background: conic-gradient(from 0deg, #ff00cc, #ffcc00, #00ff88, #ff00cc);
-            z-index: -1;
-            opacity: 0.2;
-            animation: rotateBorder 8s linear infinite;
-        }
-
-        @keyframes rotateBorder {
-            to {
-                transform: rotate(360deg);
-            }
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.05);
         }
 
         /* ----- ФУТЕР ----- */
         .footer {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 24px 40px 40px;
+            padding: 20px 40px 40px;
             border-top: 1px solid rgba(255, 255, 255, 0.03);
             display: flex;
             justify-content: space-between;
@@ -256,6 +224,8 @@
             color: rgba(255, 255, 255, 0.15);
             text-transform: uppercase;
             letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .footer a {
@@ -273,97 +243,74 @@
         }
 
         /* ----- АДАПТИВ ----- */
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
             .container {
-                grid-template-columns: 1fr;
                 padding: 40px 20px;
-                text-align: center;
+                min-height: 80vh;
             }
-            .text-block {
-                align-items: center;
+            .hero h1 {
+                font-size: 44px;
+                letter-spacing: -1px;
             }
-            .text-block p {
-                max-width: 100%;
-            }
-            .btn-group {
-                justify-content: center;
-            }
-            .model-container {
-                max-width: 400px;
-            }
-            .header-video .title-overlay {
-                left: 20px;
-                font-size: 28px;
-                bottom: 20px;
-            }
-            .header-video .badge-overlay {
-                right: 20px;
-                top: 16px;
-                font-size: 10px;
-                padding: 4px 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-video {
-                height: 40vh;
-                min-height: 200px;
-            }
-            .header-video .title-overlay {
-                font-size: 20px;
-                left: 16px;
-                bottom: 14px;
-            }
-            .header-video .badge-overlay {
-                display: none;
-            }
-            .container {
-                padding: 24px 16px;
-            }
-            .text-block h2 {
-                font-size: 30px;
-            }
-            .model-container {
-                max-width: 300px;
+            .hero p {
+                font-size: 17px;
+                padding: 0 10px;
             }
             .btn {
-                padding: 10px 20px;
+                padding: 14px 28px;
+                font-size: 13px;
+            }
+            .badge {
                 font-size: 11px;
+                padding: 6px 16px;
             }
             .footer {
                 flex-direction: column;
                 gap: 8px;
-                padding: 16px 20px;
+                padding: 16px 20px 30px;
                 text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero p {
+                font-size: 15px;
+            }
+            .btn {
+                padding: 12px 20px;
+                font-size: 11px;
+                width: 100%;
+            }
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .btn-group .btn {
+                width: 100%;
+                max-width: 280px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== ХИДЕР С ВИДЕО ===== -->
-    <header class="header-video">
-        <video autoplay muted loop playsinline>
-            <source src="video-potato.mp4" type="video/mp4">
-        </video>
-        <div class="overlay"></div>
-        <div class="badge-overlay">⚡ ХРУСТ КАК ИСКУССТВО</div>
-        <div class="title-overlay">
-            Ломай<br />
-            <span>стереотипы</span>
-        </div>
-    </header>
+    <!-- ===== ФОН ===== -->
+    <div class="bg"></div>
+    <div class="noise"></div>
 
-    <!-- ===== 3D + ТЕКСТ ===== -->
+    <!-- ===== ОСНОВНОЙ БЛОК ===== -->
     <div class="container">
-
-        <!-- Текст -->
-        <div class="text-block">
-            <div class="sub">✦ 3D-эксперимент</div>
-            <h2>
-                От картофеля<br />
-                до <span class="highlight">идеального</span> хруста
-            </h2>
+        <div class="hero">
+            <div class="badge">⚡ ХРУСТ КАК ИСКУССТВО</div>
+            <h1>
+                <span class="line1">Ломай</span>
+                <span class="line2">стереотипы</span>
+                <span class="line3">хрусти</span>
+            </h1>
             <p>
                 Мы не делаем чипсы. Мы создаём хруст, который ломает шаблоны.
                 Натуральный картофель + бунтарский подход = твой идеальный вкус.
@@ -373,18 +320,6 @@
                 <a href="#" class="btn btn-secondary">Узнать тайну</a>
             </div>
         </div>
-
-        <!-- 3D -->
-        <div class="model-wrapper">
-            <div class="model-container" id="model-container">
-                <!-- Индикатор загрузки -->
-                <div id="loading-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0a0a0a;border-radius:20px;z-index:10;transition:opacity 0.8s;">
-                    <div style="width:40px;height:40px;border:2px solid rgba(255,0,204,0.1);border-top-color:#ff00cc;border-radius:50%;animation:spin 0.6s linear infinite;"></div>
-                    <div style="font-size:13px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;">Загрузка <span id="progress-text">0%</span></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <!-- ===== ФУТЕР ===== -->
@@ -396,123 +331,6 @@
             <a href="#">ВКонтакте</a>
         </span>
     </div>
-
-    <!-- ===== THREE.JS ===== -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-        const container = document.getElementById('model-container');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const progressText = document.getElementById('progress-text');
-
-        // Сцена
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a0a);
-
-        // Камера
-        const camera = new THREE.PerspectiveCamera(30, container.clientWidth / container.clientHeight, 0.1, 100);
-        camera.position.set(5, 2, 7);
-
-        // Рендерер
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.5;
-        container.appendChild(renderer.domElement);
-
-        // Управление
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 2.0;
-        controls.minDistance = 3;
-        controls.maxDistance = 15;
-        controls.target.set(0, 0, 0);
-
-        // Свет
-        scene.add(new THREE.AmbientLight(0x222244, 0.5));
-        const key = new THREE.DirectionalLight(0xff00cc, 2.0);
-        key.position.set(3, 5, 4);
-        scene.add(key);
-        const fill = new THREE.DirectionalLight(0x00ff88, 1.0);
-        fill.position.set(-4, 2, -2);
-        scene.add(fill);
-        const rim = new THREE.DirectionalLight(0xffcc00, 0.8);
-        rim.position.set(-2, 1, 6);
-        scene.add(rim);
-        const bottom = new THREE.PointLight(0xff00cc, 0.5, 10);
-        bottom.position.set(0, -3, 0);
-        scene.add(bottom);
-
-        // Модель
-        const loader = new GLTFLoader();
-        loader.load(
-            'scene.glb',
-            (gltf) => {
-                const model = gltf.scene;
-                model.scale.set(1.5, 1.5, 1.5);
-                model.position.y = -0.5;
-                scene.add(model);
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => { loadingOverlay.style.display = 'none'; }, 800);
-            },
-            (xhr) => {
-                const percent = Math.round((xhr.loaded / xhr.total) * 100);
-                progressText.textContent = percent + '%';
-            },
-            () => {
-                loadingOverlay.innerHTML = `
-                    <div style="color:#ff00cc;font-size:28px;">✖</div>
-                    <div style="color:rgba(255,255,255,0.3);font-size:13px;">3D не загрузился</div>
-                    <div style="color:rgba(255,255,255,0.15);font-size:11px;">Хруст остаётся</div>
-                `;
-            }
-        );
-
-        // Ресайз
-        function resize() {
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            renderer.setSize(w, h);
-            camera.aspect = w / h;
-            camera.updateProjectionMatrix();
-        }
-        window.addEventListener('resize', resize);
-        setTimeout(resize, 100);
-
-        // Анимация
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        renderer.domElement.addEventListener('pointerdown', () => { controls.autoRotate = false; });
-        renderer.domElement.addEventListener('pointerup', () => {
-            setTimeout(() => { controls.autoRotate = true; }, 3000);
-        });
-
-        setTimeout(() => {
-            if (loadingOverlay.style.opacity !== '0') {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => { loadingOverlay.style.display = 'none'; }, 800);
-            }
-        }, 15000);
-    </script>
 
 </body>
 </html>
