@@ -26,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* ----- КУРСОР ----- */
         .cursor {
             position: fixed;
             width: 40px;
@@ -61,7 +60,6 @@
             border-color: #00ff88;
         }
 
-        /* ----- ХИДЕР ----- */
         .header {
             width: 100%;
             min-height: 100vh;
@@ -222,7 +220,6 @@
             color: #00ff88;
         }
 
-        /* ----- ВИДЕО-БЛОК ----- */
         .video-section {
             width: 100%;
             height: 100vh;
@@ -263,7 +260,6 @@
             text-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
         }
 
-        /* ===== ВЕСЬ ТЕКСТ — НЕОНОВЫЙ ===== */
         .video-section .overlay-text h2 {
             font-size: 38px;
             font-weight: 800;
@@ -313,7 +309,6 @@
             width: 100%;
         }
 
-        /* ----- 3D-БЛОК ----- */
         .three-d-section {
             width: 100%;
             min-height: 100vh;
@@ -359,6 +354,10 @@
             box-shadow: 0 0 80px rgba(255, 0, 204, 0.04);
             overflow: hidden;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1a1a2e, #0a0a0a);
         }
 
         .model-container canvas {
@@ -387,7 +386,6 @@
             }
         }
 
-        /* ----- ФУТЕР ----- */
         .footer {
             max-width: 1200px;
             margin: 0 auto;
@@ -412,7 +410,6 @@
             color: #ff00cc;
         }
 
-        /* ----- АДАПТИВ ----- */
         @media (max-width: 1024px) {
             .header h1 {
                 font-size: 52px;
@@ -498,7 +495,6 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- ===== ХИДЕР ===== -->
     <header class="header" id="header">
         <div class="header-content">
             <div class="badge">⚡ ХРУСТ КАК ИСКУССТВО</div>
@@ -518,7 +514,6 @@
         </div>
     </header>
 
-    <!-- ===== ВИДЕО-БЛОК ===== -->
     <section class="video-section" id="video-section">
         <video id="mainVideo" autoplay muted loop playsinline>
             <source src="video-potato.webm" type="video/webm">
@@ -555,14 +550,10 @@
             </p>
         </div>
         <div class="model-container" id="model-container">
-            <div id="loading-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0a0a0a;border-radius:20px;z-index:10;transition:opacity 0.8s;">
-                <div style="width:40px;height:40px;border:2px solid rgba(255,0,204,0.1);border-top-color:#ff00cc;border-radius:50%;animation:spin 0.6s linear infinite;"></div>
-                <div style="font-size:13px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;">Загрузка <span id="progress-text">0%</span></div>
-            </div>
+            <canvas id="simple3d"></canvas>
         </div>
     </section>
 
-    <!-- ===== ФУТЕР ===== -->
     <div class="footer">
         <span>© 2026 <span style="color:rgba(255,0,204,0.3);">✦</span> Клуб бунтарей Lorenz</span>
         <span>
@@ -573,131 +564,176 @@
     </div>
 
     <!-- ===== THREE.JS ===== -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('simple3d');
+            if (!canvas) return;
+
+            const container = document.getElementById('model-container');
+            const w = container.clientWidth || 400;
+            const h = container.clientHeight || 400;
+
+            canvas.width = w;
+            canvas.height = h;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+
+            const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+            camera.position.set(3, 2, 5);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Свет
+            const ambient = new THREE.AmbientLight(0x333355, 0.6);
+            scene.add(ambient);
+
+            const light1 = new THREE.DirectionalLight(0xff00cc, 2);
+            light1.position.set(3, 5, 4);
+            scene.add(light1);
+
+            const light2 = new THREE.DirectionalLight(0x00ff88, 1.5);
+            light2.position.set(-3, 2, 4);
+            scene.add(light2);
+
+            const light3 = new THREE.DirectionalLight(0xffcc00, 1);
+            light3.position.set(0, -2, 5);
+            scene.add(light3);
+
+            // Группа объектов
+            const group = new THREE.Group();
+
+            // Сфера
+            const sphereGeo = new THREE.SphereGeometry(0.8, 32, 32);
+            const sphereMat = new THREE.MeshStandardMaterial({
+                color: 0xff00cc,
+                emissive: 0xff00cc,
+                emissiveIntensity: 0.3,
+                metalness: 0.7,
+                roughness: 0.2,
+            });
+            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+            group.add(sphere);
+
+            // Кольцо 1
+            const ringGeo = new THREE.TorusGeometry(1.2, 0.05, 16, 64);
+            const ringMat = new THREE.MeshStandardMaterial({
+                color: 0x00ff88,
+                emissive: 0x00ff88,
+                emissiveIntensity: 0.5,
+                metalness: 0.8,
+                roughness: 0.1,
+            });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2;
+            group.add(ring);
+
+            // Кольцо 2
+            const ring2Geo = new THREE.TorusGeometry(1.4, 0.03, 16, 64);
+            const ring2Mat = new THREE.MeshStandardMaterial({
+                color: 0xffcc00,
+                emissive: 0xffcc00,
+                emissiveIntensity: 0.3,
+                metalness: 0.8,
+                roughness: 0.1,
+            });
+            const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+            ring2.rotation.z = Math.PI / 3;
+            ring2.rotation.x = Math.PI / 4;
+            group.add(ring2);
+
+            // Частицы
+            const particlesGeo = new THREE.BufferGeometry();
+            const particlesCount = 100;
+            const positions = new Float32Array(particlesCount * 3);
+            for (let i = 0; i < particlesCount * 3; i++) {
+                const radius = 1.8 + Math.random() * 0.5;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI * 2;
+                positions[i * 3] = Math.sin(theta) * Math.cos(phi) * radius;
+                positions[i * 3 + 1] = Math.sin(theta) * Math.sin(phi) * radius;
+                positions[i * 3 + 2] = Math.cos(theta) * radius;
             }
-        }
-    </script>
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particlesMat = new THREE.PointsMaterial({
+                color: 0x00ff88,
+                size: 0.03,
+                transparent: true,
+                opacity: 0.8,
+            });
+            const particles = new THREE.Points(particlesGeo, particlesMat);
+            group.add(particles);
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+            scene.add(group);
 
-        const container = document.getElementById('model-container');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const progressText = document.getElementById('progress-text');
+            // Управление мышью
+            let isDragging = false;
+            let prevMouse = { x: 0, y: 0 };
+            let autoRotate = true;
 
-        if (!container) {
-            console.error('❌ Контейнер 3D не найден!');
-            return;
-        }
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                autoRotate = false;
+                prevMouse = { x: e.clientX, y: e.clientY };
+            });
 
-        console.log('✅ Запускаем 3D-сцену');
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - prevMouse.x;
+                const dy = e.clientY - prevMouse.y;
+                group.rotation.y += dx * 0.01;
+                group.rotation.x += dy * 0.01;
+                prevMouse = { x: e.clientX, y: e.clientY };
+            });
 
-        // --- СЦЕНА ---
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a2e);
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+                setTimeout(() => { autoRotate = true; }, 3000);
+            });
 
-        // --- КАМЕРА ---
-        const camera = new THREE.PerspectiveCamera(35, container.clientWidth / container.clientHeight, 0.1, 100);
-        camera.position.set(3, 2, 5);
-
-        // --- РЕНДЕРЕР ---
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        // --- УПРАВЛЕНИЕ ---
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 2.0;
-        controls.target.set(0, 0, 0);
-        controls.update();
-
-        // --- СВЕТ ---
-        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-        const light = new THREE.DirectionalLight(0xffffff, 2);
-        light.position.set(5, 10, 7);
-        scene.add(light);
-        scene.add(new THREE.DirectionalLight(0xff66aa, 1).position.set(-3, 2, 4));
-
-        // --- ТЕСТОВАЯ СЕТКА (чтобы видеть, что 3D работает) ---
-        const grid = new THREE.GridHelper(3, 10, 0xff00cc, 0x444466);
-        grid.position.y = -0.5;
-        scene.add(grid);
-
-        // --- ЗАГРУЗКА МОДЕЛИ ---
-        const loader = new GLTFLoader();
-        loadingOverlay.style.display = 'flex';
-
-        loader.load(
-            'scene.glb',
-            (gltf) => {
-                const model = gltf.scene;
-
-                // Масштабируем, чтобы поместилась
-                const box = new THREE.Box3().setFromObject(model);
-                const size = box.getSize(new THREE.Vector3());
-                const maxDim = Math.max(size.x, size.y, size.z);
-                if (maxDim > 0) {
-                    model.scale.set(1.5 / maxDim, 1.5 / maxDim, 1.5 / maxDim);
+            // Анимация
+            function animate() {
+                requestAnimationFrame(animate);
+                if (autoRotate) {
+                    group.rotation.y += 0.01;
+                    group.rotation.x = Math.sin(Date.now() * 0.0003) * 0.2;
                 }
-
-                // Центрируем
-                const center = box.getCenter(new THREE.Vector3());
-                model.position.sub(center);
-
-                scene.add(model);
-                loadingOverlay.style.display = 'none';
-                console.log('✅ Модель загружена!');
-            },
-            (xhr) => {
-                const percent = Math.round((xhr.loaded / xhr.total) * 100);
-                progressText.textContent = percent + '%';
-            },
-            (error) => {
-                console.error('❌ Ошибка загрузки модели:', error);
-                loadingOverlay.innerHTML = `
-                    <div style="color:#ff00cc;font-size:48px;">🥔</div>
-                    <div style="color:rgba(255,255,255,0.3);">3D не загрузился</div>
-                    <div style="color:rgba(255,255,255,0.1);font-size:12px;">Файл: scene.glb</div>
-                `;
+                const time = Date.now() * 0.001;
+                ring.scale.x = 1 + Math.sin(time * 0.5) * 0.05;
+                ring.scale.y = 1 + Math.sin(time * 0.5 + 0.5) * 0.05;
+                ring2.scale.x = 1 + Math.sin(time * 0.3 + 1) * 0.05;
+                ring2.scale.y = 1 + Math.sin(time * 0.3 + 1.5) * 0.05;
+                renderer.render(scene, camera);
             }
-        );
+            animate();
 
-        // --- АДАПТИВ ---
-        function resize() {
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            if (w > 0 && h > 0) {
+            // Адаптив
+            function resize() {
+                const rect = container.getBoundingClientRect();
+                const w = rect.width || 400;
+                const h = rect.height || 400;
+                canvas.width = w;
+                canvas.height = h;
                 renderer.setSize(w, h);
                 camera.aspect = w / h;
                 camera.updateProjectionMatrix();
             }
-        }
-        window.addEventListener('resize', resize);
-        setTimeout(resize, 100);
 
-        // --- АНИМАЦИЯ ---
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
+            window.addEventListener('resize', resize);
+            setTimeout(resize, 200);
+            setTimeout(resize, 500);
 
-        console.log('🎬 3D-сцена запущена');
+            console.log('✅ 3D-объект запущен');
+        })();
     </script>
 
-    <!-- ===== КУРСОР + СКРОЛЛ + ВИДЕО ===== -->
     <script>
-        // ----- КУРСОР -----
+        // Курсор
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
 
@@ -717,7 +753,7 @@
             });
         });
 
-        // ----- СКРОЛЛ -----
+        // Скролл
         document.getElementById('btn-explode').addEventListener('click', () => {
             const target = document.getElementById('video-section');
             if (target) {
@@ -738,7 +774,7 @@
             }
         });
 
-        // ----- ВИДЕО: принудительный запуск -----
+        // Видео
         document.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('mainVideo');
             if (video) {
@@ -750,12 +786,12 @@
             }
         });
 
-        // Перезапуск видео, если остановилось
         document.getElementById('mainVideo')?.addEventListener('pause', function() {
             if (this.readyState > 0) {
                 this.play().catch(() => {});
             }
         });
     </script>
+
 </body>
 </html>
